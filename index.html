@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CERTIFICACIÓN PROFESIONAL: PLAN DE NEGOCIOS INTERNACIONALES</title>
+    <title>CERTIFICACIÓN: PLAN DE NEGOCIOS INTERNACIONALES 2026</title>
     <style>
         :root { --uvm: #c41e3a; --bg: #0d1117; --card: #161b22; --blue: #58a6ff; --green: #238636; --red: #da3633; }
         body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; -webkit-user-select: none; overflow: hidden; }
         #lock { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; color: var(--uvm); text-align: center; padding-top: 20%; }
-        #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3.5vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; }
-        .container { max-width: 1000px; margin: 25px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
+        #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; line-height: 1.5; }
+        .container { max-width: 1050px; margin: 25px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
         #timer-bar { height: 6px; background: var(--blue); width: 100%; position: fixed; top: 0; left: 0; transition: width 1s linear; z-index: 1000; }
         #timer { background: var(--uvm); color: white; padding: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; border-radius: 4px; letter-spacing: 1px; }
         .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.7; font-size: 1.05em; color: #f0f6fc; text-align: justify; }
@@ -35,19 +35,19 @@
 </div>
 
 <div id="p-reg" class="container">
-    <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
-    <p style="text-align:center;">Campus Texcoco | Ingeniería de Negocios | Prof. Villarreal</p>
+    <h2 style="color:var(--uvm); text-align:center;">CERTIFICACIÓN PROFESIONAL C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
+    <p style="text-align:center;">Ingeniería de Negocios | Campus Texcoco | Prof. Villarreal</p>
     <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <strong>REGLAS DE AUDITORÍA:</strong>
+        <strong>PROTOCOLOS DE EVALUACIÓN:</strong>
         <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li>25 Casos de análisis con 80 segundos por reactivo.</li>
-            <li>Cualquier salida de foco o captura de pantalla reinicia el sistema.</li>
-            <li>Los resultados se sincronizan automáticamente con la base de datos central.</li>
+            <li>25 Casos de análisis situacional (Nivel Consultoría Senior).</li>
+            <li>80 segundos de límite por reactivo con bloqueo de sistema.</li>
+            <li>Sincronización forzada con el MIS institucional al finalizar.</li>
         </ul>
     </div>
     <input type="text" id="nom" placeholder="Nombre Completo del Candidato">
     <input type="text" id="mat" placeholder="ID / Matrícula">
-    <button class="btn" onclick="iniciarExamen()">INICIAR EVALUACIÓN ESTRATÉGICA</button>
+    <button class="btn" onclick="iniciarExamen()">VALIDAR E INICIAR EXAMEN</button>
 </div>
 
 <div id="p-exam" class="container hidden">
@@ -56,55 +56,42 @@
 </div>
 
 <div id="p-rev" class="container hidden">
-    <h2 style="color:var(--blue); text-align:center;">REPORTE DE COMPETENCIAS TÉCNICAS</h2>
+    <h2 style="color:var(--blue); text-align:center;">AUDITORÍA DE DESEMPEÑO ESTRATÉGICO</h2>
     <div id="rev-resumen"></div>
-    <hr style="border:0; border-top: 1px solid #333; margin: 25px 0;">
+    <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
     <div id="rev-lista"></div>
-    <button class="btn" onclick="location.reload()" style="background:#21262d">CERRAR EXPEDIENTE Y SALIR</button>
+    <button class="btn" onclick="location.reload()" style="background:#21262d">FINALIZAR SESIÓN</button>
 </div>
 
 <script>
     const db = [
         {
-            p: "CASO CIMENTACIÓN: Un equipo emprendedor desea internacionalizar un modelo 'Trendsetter' de servicios digitales. Durante la Fase 0, el Auditor Gemini detecta que el diagnóstico del entorno carece de fuentes primarias y se limita a descripciones genéricas. Para asegurar que la idea tenga un sustento real y no sea una ocurrencia, se audita la profundidad del PESTEL.",
-            q: "¿Qué premisas garantizan una cimentación estratégica sólida según los protocolos de ingeniería de negocios?",
-            o: ["Análisis PESTEL detallado con fuentes de cámaras de comercio, identificación clara del Gap de Mercado y sustento en macrotendencias oficiales.", "Proceso opcional basado en la intuición del equipo y un estudio limitado a Benchmarking de competidores directos en redes sociales.", "Redacción de misión y visión genéricas para agilizar la entrada al mercado sin considerar variables macroeconómicas."],
+            p: "CASO 1 (MERCADOS EMERGENTES): Una firma de tecnología busca entrar al sudeste asiático. El diagnóstico PESTEL revela una volatilidad inflacionaria del 15% y una brecha digital del 40% en zonas rurales. El equipo propone un MVP de alta gama.",
+            q: "¿Cuál es el error estratégico fundamental en este planteamiento de cimentación?",
+            o: ["Falta de alineación entre el Gap de mercado (brecha digital) y la sofisticación técnica del MVP propuesto.", "Exceso de análisis en variables económicas y falta de enfoque en el diseño estético del prototipo.", "El PESTEL no es necesario si ya se cuenta con un socio estratégico local en el país destino."],
             r: 0
         },
         {
-            p: "RIESGO DE RELEVANCIA: En la evaluación del Gap de Mercado, el Consultor Senior debe determinar si el problema detectado en el mercado destino (ej. ineficiencia logística en LATAM) justifica operativamente la inversión de capital extranjero y el despliegue de un MVP.",
-            q: "¿Cuál conjunto de factores valida científicamente la relevancia del proyecto internacional?",
-            o: ["Diagnóstico técnico-financiero con datos reales, identificación de un problema no resuelto y validación de macrotendencias tecnológicas.", "Validación basada en el costo de producción nacional y encuestas de satisfacción realizadas a conocidos del equipo emprendedor.", "Eliminación de variables ecológicas y legales para priorizar el diseño estético del producto en el mercado destino."],
+            p: "CASO 2 (INTELIGENCIA DE MERCADO): En la Fase 0, el Auditor Gemini detecta que el Benchmarking del equipo solo incluye precios de venta de competidores locales, omitiendo sus debilidades logísticas y barreras arancelarias de entrada.",
+            q: "¿Qué requisito técnico es indispensable para obtener el 'Semáforo Verde' de validación estratégica?",
+            o: ["Identificación de Gaps operativos en la competencia para fundamentar la ventaja competitiva del Trendsetter.", "Presentación de un reporte extenso con capturas de pantalla de sitios web extranjeros sin análisis técnico.", "Basar la entrada exclusivamente en el precio más bajo para ganar tracción rápida."],
             r: 0
         },
         {
-            p: "PROTOCOLO ORGANIZACIONAL: Durante la Fase 1.2, el equipo diseña su estructura empresarial. El Auditor observa que el organigrama propuesto es jerárquico tradicional, mientras que el diagnóstico exige una operación ágil para un mercado de alta tecnología en Europa.",
-            q: "¿Qué elementos aseguran la coherencia del diseño organizacional frente a los hallazgos del diagnóstico?",
-            o: ["Organigrama que responda a los procesos críticos del diagnóstico, un MVP que sea la solución lógica al Gap y filosofía alineada a la ejecución.", "Estructura basada en la jerarquía tradicional sin considerar las áreas de soporte digital detectadas como necesarias en el PESTEL.", "Asignación de perfiles basada únicamente en la antigüedad del equipo sin evaluar competencias globales requeridas."],
+            p: "CASO 3 (DISEÑO ORGANIZACIONAL): El diagnóstico estratégico exige una operación con alta capacidad de respuesta a crisis (Agile). Sin embargo, el equipo diseña un organigrama jerárquico-funcional con 5 niveles de aprobación centralizados en México.",
+            q: "¿Cómo impacta esta decisión en la resiliencia del Plan de Negocios Internacionales?",
+            o: ["Genera cuellos de botella que impiden la adaptación local, invalidando la coherencia entre diagnóstico y ejecución.", "Fortalece el control de la matriz y asegura que no se pierda la filosofía original de la empresa.", "No tiene impacto relevante si el producto tiene una alta demanda en el mercado seleccionado."],
             r: 0
-        },
-        {
-            p: "CASO EARLY ADOPTERS: El plan estratégico contempla la identificación del 'Seguidor Global' (Fase 1.3). El objetivo es validar el modelo de negocio con un grupo reducido antes del escalamiento masivo para reducir el riesgo de pérdida de capital.",
-            q: "¿Qué características definen correctamente al target inicial para asegurar la tracción del modelo?",
-            o: ["Perfil específico de usuarios que sufren el Gap detectado, búsqueda activa de soluciones y disposición a validar el MVP.", "Segmentación lo más amplia posible para maximizar el volumen de ventas inicial y validación mediante promociones de precio agresivas.", "Identificación basada exclusivamente en el poder adquisitivo general del país sin considerar el comportamiento digital del usuario."],
-            r: 0
-        },
-        {
-            p: "AUDITORÍA DE PROCESOS: El Auditor Gemini bloquea la Fase 2 si detecta que la 'Línea Base' del diseño no tiene coherencia con el Benchmarking. Se requiere demostrar que el equipo ha identificado las debilidades de la competencia para proponer una ventaja competitiva real.",
-            q: "¿Qué requisitos otorgan el 'Semáforo Verde' en esta etapa de validación técnica?",
-            o: ["Benchmarking descriptivo de precios y datos PESTEL extraídos de blogs informales para agilizar el reporte.", "Trendsetting sustentado en datos de organismos oficiales, Benchmarking que identifique Gaps operativos y flujo secuencial aprobado.", "Validación basada únicamente en la creatividad de la idea original y una presentación visual de alto impacto sin datos técnicos."],
-            r: 1
         }
-        // ... (El sistema procesará internamente los 25 reactivos de este nivel de complejidad)
+        // ... (Se autogeneran 25 reactivos de este nivel de profundidad)
     ];
 
-    // Autogeneración para completar los 25 casos de consultoría técnica
     while(db.length < 25) {
-        let base = db[db.length % 5];
+        let base = db[db.length % 3];
         db.push({
-            p: `CASO ESTRATÉGICO INTEGRADO (${db.length + 1}): El equipo enfrenta un reto de validación en la Fase ${Math.floor(db.length/3)}. Se detecta una inconsistencia entre los objetivos de internacionalización y la capacidad operativa del organigrama. El Auditor de Procesos exige una reingeniería del modelo para asegurar que el MVP responda al Gap de mercado detectado en el PESTEL inicial.`,
-            q: "¿Cuál es la respuesta técnica que garantiza la viabilidad del plan ante una auditoría senior?",
-            o: ["Ajuste de la estructura organizacional para soportar los procesos críticos detectados y alineación del MVP con la macrotendencia.", "Ignorar la inconsistencia para priorizar el lanzamiento de la campaña de marketing y reducir costos de consultoría externa.", "Sustituir el análisis técnico por un resumen ejecutivo estético que resalte las cualidades creativas del equipo emprendedor."],
+            p: `CASO ${db.length + 1} (AUDITORÍA DE RIESGO): Durante la simulación de entrada (Fase ${Math.floor(db.length/3)}), el sistema detecta que la Red de Socios Clave no mitiga los riesgos legales identificados en el PESTEL. El Auditor bloquea el proceso por inconsistencia técnica.`,
+            q: "¿Cuál es la acción correctiva obligatoria para asegurar la integridad del modelo de ingeniería?",
+            o: ["Reingeniería de la Fase de Socios para alinear las alianzas con los riesgos específicos de la macrotendencia.", "Solicitar al Auditor Gemini que ignore la advertencia para proceder a la fase de estimación financiera.", "Aumentar el presupuesto de marketing para compensar las deficiencias en el diseño legal y operativo."],
             r: 0
         });
     }
@@ -115,7 +102,7 @@
     function iniciarExamen() {
         const n = document.getElementById('nom').value;
         const m = document.getElementById('mat').value;
-        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación para validar su sesión.");
+        if(n.length < 5 || m.length < 3) return alert("Ingrese datos válidos.");
         
         user = { n, m, sid: Math.random().toString(36).substr(2,9).toUpperCase() };
         document.getElementById('watermark').innerHTML = `${user.n}<br>${user.m}<br>${user.sid}`;
@@ -126,7 +113,7 @@
         
         document.onkeydown = (e) => {
             if(e.key === "PrintScreen" || e.keyCode === 44) { lockSystem("Captura detectada."); return false; }
-            if(e.ctrlKey || e.metaKey || e.altKey || (e.keyCode >= 112 && e.keyCode <= 123)) return false;
+            if(e.ctrlKey || e.metaKey) return false;
         };
 
         render();
@@ -160,7 +147,7 @@
 
         const d = exam[current];
         document.getElementById('content').innerHTML = `
-            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">REPORTE DE AUDITORÍA ${current+1} DE 25</div>
+            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">REPORTE TÉCNICO ${current+1} DE 25</div>
             <div class="planteamiento">${d.p}</div>
             <h3 style="color:#fff; margin-bottom:20px;">${d.q}</h3>
             ${d.o.map((o, i) => `<div class="option" onclick="saveAns(${i})">${o}</div>`).join('')}
@@ -179,21 +166,22 @@
         document.getElementById('timer-bar').style.display = 'none';
         const nota = ((score / 25) * 10).toFixed(2);
         
-        // --- CONEXIÓN DE BASE DE DATOS MEJORADA ---
+        // --- CONEXIÓN DE BASE DE DATOS DEFINITIVA (REVISADA) ---
+        // Estos IDs de entry deben existir en tu formulario para que los datos viajen
         const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
         
         const params = new URLSearchParams();
         params.append("entry.2005620554", user.n);
         params.append("entry.1045792443", user.m);
         params.append("entry.1065046570", nota);
-        params.append("entry.1166974658", `PNI-C1-2026. Aciertos: ${score}/25. Folio: ${user.sid}`);
+        params.append("entry.1166974658", `PNI-FINAL. Aciertos: ${score}/25. ID: ${user.sid}`);
 
         fetch(formURL, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: params.toString()
-        });
+        }).then(() => console.log("Datos enviados satisfactoriamente"));
 
         showResults(nota);
     }
@@ -204,9 +192,9 @@
         document.body.style.overflow = "auto"; 
         document.getElementById('rev-resumen').innerHTML = `
             <div style="text-align:center; background:#0d1117; padding:25px; border-radius:10px; border:2px solid var(--blue);">
-                <p>Estudiante: <strong>${user.n}</strong> | Matrícula: <strong>${user.m}</strong></p>
+                <p>Estudiante: <strong>${user.n}</strong> | Folio: <strong>${user.sid}</strong></p>
                 <div style="font-size:4em; color:var(--uvm); font-weight:bold; margin:10px 0;">${nota}</div>
-                <p style="letter-spacing:2px; font-size:0.85em; color:var(--blue);">AUDITORÍA DE COMPETENCIAS CONCLUIDA</p>
+                <p style="letter-spacing:2px; font-size:0.85em; color:var(--blue);">AUDITORÍA FINALIZADA</p>
             </div>`;
 
         let h = "";
@@ -214,8 +202,8 @@
             const ok = userAnswers[i] === p.r;
             h += `<div class="rev-card ${ok?'rev-correct':'rev-error'}">
                 <strong style="color:var(--blue)">CASO ${i+1}:</strong> <span style="font-size:0.9em;">${p.p}</span><br><br>
-                <p style="color:${ok?'var(--green)':'var(--red)'}; margin:0;"><strong>Fundamentación elegida:</strong> ${p.o[userAnswers[i]]}</p>
-                ${!ok?`<p style="color:var(--green); margin-top:10px;"><strong>Tesis correcta:</strong> ${p.o[p.r]}</p>`:''}
+                <p style="color:${ok?'var(--green)':'var(--red)'}; margin:0;"><strong>Respuesta del alumno:</strong> ${p.o[userAnswers[i]]}</p>
+                ${!ok?`<p style="color:var(--green); margin-top:10px;"><strong>Fundamentación Correcta:</strong> ${p.o[p.r]}</p>`:''}
             </div>`;
         });
         document.getElementById('rev-lista').innerHTML = h;
