@@ -29,39 +29,39 @@
 <div id="timer-bar"></div>
 <div id="watermark"></div>
 
-<!-- iFrame invisible para el envío de datos -->
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {showResults(notaFinal);}"></iframe>
-
 <div id="lock">
     <h1>⚠️ PROTOCOLO DE SEGURIDAD ACTIVADO</h1>
     <p id="lock-msg">Conducta sospechosa o inactividad. Examen invalidado.</p>
 </div>
 
+<!-- Pantalla de Registro -->
 <div id="p-reg" class="container">
     <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
     <p style="text-align:center;">Campus Texcoco | Ingeniería de Negocios | Prof. Villarreal</p>
     <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
         <strong>REGLAS DE AUDITORÍA:</strong>
         <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li>25 Casos de análisis complejo (Nivel Ingeniería).</li>
-            <li>80 segundos por reactivo. No se permite salida de ventana.</li>
-            <li>El reporte se genera automáticamente al finalizar.</li>
+            <li>25 Reactivos de análisis complejo. 80 segundos por reactivo.</li>
+            <li>No se permite el uso de otras pestañas o capturas de pantalla.</li>
+            <li>Los resultados se envían automáticamente al finalizar.</li>
         </ul>
     </div>
-    <input type="text" id="nom" placeholder="Nombre Completo">
-    <input type="text" id="mat" placeholder="Matrícula">
-    <button class="btn" onclick="iniciarExamen()">INICIAR EVALUACIÓN ESTRATÉGICA</button>
+    <input type="text" id="nom" placeholder="Nombre Completo del Candidato">
+    <input type="text" id="mat" placeholder="Matrícula / ID">
+    <button class="btn" onclick="iniciarExamen()">VALIDAR E INICIAR EXAMEN</button>
 </div>
 
+<!-- Pantalla de Examen -->
 <div id="p-exam" class="container hidden">
     <div id="timer">TIEMPO GLOBAL: <span id="clock">60:00</span></div>
     <div id="content"></div>
 </div>
 
+<!-- Pantalla de Revisión -->
 <div id="p-rev" class="container hidden">
     <h2 style="color:var(--blue); text-align:center;">REPORTE DE COMPETENCIAS TÉCNICAS</h2>
     <div id="rev-resumen"></div>
-    <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
+    <hr style="border:0; border-top: 1px solid #333; margin: 25px 0;">
     <div id="rev-lista"></div>
     <button class="btn" onclick="location.reload()" style="background:#21262d">SALIR DEL SISTEMA</button>
 </div>
@@ -69,7 +69,7 @@
 <script>
     const db = [
         {
-            p: "ESTUDIO DE CASO (CIMENTACIÓN): Un equipo emprendedor busca internacionalizar un modelo 'Trendsetter' en servicios de logística inversa en Europa. El PESTEL detecta normativas ecológicas severas en el país destino, pero el diagnóstico inicial del equipo no propone una adaptación técnica en el MVP.",
+            p: "ESTUDIO DE CASO (CIMENTACIÓN): Un equipo emprendedor busca internacionalizar un modelo 'Trendsetter' de servicios de logística inversa en Europa. El PESTEL detecta normativas ecológicas severas en el país destino, pero el diagnóstico inicial del equipo no propone una adaptación técnica en el MVP.",
             q: "¿Qué riesgo de auditoría se presenta en esta cimentación estratégica?",
             o: ["Riesgo de Incoherencia: El MVP no responde a las variables legales y ecológicas del diagnóstico.", "Riesgo de Target: Los Early Adopters no tienen capacidad de compra.", "Riesgo de Tracción: El Benchmarking muestra que la competencia es demasiado débil."],
             r: 0
@@ -99,7 +99,7 @@
     }
 
     let user = {}, exam = [], userAnswers = [], current = 0, score = 0, timeLeft = 3600, qTime = 80;
-    let qTimer, gTimer, submitted = false, notaFinal = 0;
+    let qTimer, gTimer;
 
     function iniciarExamen() {
         const n = document.getElementById('nom').value;
@@ -151,35 +151,27 @@
     function finish() {
         clearInterval(qTimer); clearInterval(gTimer);
         document.getElementById('timer-bar').style.display = 'none';
-        notaFinal = ((score / 25) * 10).toFixed(2);
+        const nota = ((score / 25) * 10).toFixed(2);
         
-        // --- MÉTODO DE ENVÍO POR FORMULARIO OCULTO ---
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
-        form.target = "hidden_iframe";
-
-        const fields = {
-            "entry.2005620554": user.n,
-            "entry.1045792443": user.m,
-            "entry.1065046570": notaFinal,
-            "entry.1166974658": `Folio: ${user.sid}. Aciertos: ${score}/25`
-        };
-
-        for (let key in fields) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = fields[key];
-            form.appendChild(input);
-        }
-
-        submitted = true;
-        document.body.appendChild(form);
-        form.submit();
+        // --- MÉTODO DE ENVÍO URL-ENCODED (EL MÁS SEGURO PARA GOOGLE) ---
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
         
-        // Fallback: Si el iFrame no carga por alguna razón, mostramos resultados después de 1 segundo
-        setTimeout(() => { if(submitted) showResults(notaFinal); }, 1000);
+        const params = new URLSearchParams();
+        params.append("entry.2005620554", user.n); // ID Campo Nombre
+        params.append("entry.1045792443", user.m); // ID Campo Matrícula
+        params.append("entry.1065046570", nota);   // ID Campo Nota
+        params.append("entry.1166974658", `Folio: ${user.sid}. Aciertos: ${score}/25`); // ID Campo Errores
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString()
+        }).then(() => {
+            console.log("Datos enviados");
+        });
+
+        showResults(nota);
     }
 
     function showResults(nota) {
