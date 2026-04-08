@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXAMEN: PLAN DE NEGOCIOS INTERNACIONALES 2026</title>
+    <style>
+        :root { --uvm: #c41e3a; --bg: #0d1117; --card: #161b22; --blue: #58a6ff; --green: #238636; --red: #da3633; }
+        body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; -webkit-user-select: none; overflow: hidden; }
+        #lock { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; color: var(--uvm); text-align: center; padding-top: 20%; }
+        #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; line-height: 1.5; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
+        #timer-bar { height: 6px; background: var(--blue); width: 100%; position: fixed; top: 0; left: 0; transition: width 1s linear; z-index: 1000; }
+        #timer { background: var(--uvm); color: white; padding: 10px; text-align: center; font-weight: bold; margin-bottom: 20px; border-radius: 4px; letter-spacing: 1px; }
+        .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.7; font-size: 1.05em; color: #f0f6fc; text-align: justify; }
+        .option { display: block; background: #21262d; border: 1px solid #30363d; padding: 18px; margin: 10px 0; cursor: pointer; border-radius: 8px; transition: 0.2s; font-size: 0.95em; }
+        .option:hover { border-color: var(--blue); background: #2d333b; transform: translateX(10px); }
+        input { background: #0d1117; border: 1px solid #30363d; color: white; padding: 15px; width: calc(100% - 35px); margin-bottom: 20px; border-radius: 6px; font-size: 16px; }
+        .btn { background: var(--uvm); color: white; border: none; padding: 20px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 18px; text-transform: uppercase; }
+        .hidden { display: none !important; }
+        #p-rev { overflow-y: auto; max-height: 85vh; padding-right: 15px; }
+        .rev-card { border: 1px solid #333; padding: 25px; margin-bottom: 25px; border-radius: 8px; background: #0d1117; border-left: 6px solid #444; }
+        .rev-correct { border-left-color: var(--green); }
+        .rev-error { border-left-color: var(--red); }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div id="timer-bar"></div>
+<div id="watermark"></div>
+
+<div id="lock">
+    <h1>⚠️ PROTOCOLO DE SEGURIDAD ACTIVADO</h1>
+    <p id="lock-msg">Detección de conducta sospechosa o inactividad. Examen invalidado.</p>
+</div>
+
+<!-- Registro -->
+<div id="p-reg" class="container">
+    <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
+    <p style="text-align:center;">Campus Texcoco | Licenciatura Semestral | Prof. Villarreal</p>
+    <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <strong>INSTRUCCIONES DE AUDITORÍA:</strong>
+        <ul style="font-size: 0.9em; line-height: 1.8;">
+            <li>25 Reactivos de análisis situacional con 80 segundos de límite por cada uno.</li>
+            <li>Bloqueo automático ante pérdida de foco (cambio de pestaña) o PrintScreen.</li>
+            <li>Sincronización forzada con el MIS institucional al finalizar.</li>
+        </ul>
+    </div>
+    <input type="text" id="nom" placeholder="Nombre Completo del Estudiante">
+    <input type="text" id="mat" placeholder="Matrícula / ID">
+    <button class="btn" onclick="iniciarExamen()">VALIDAR E INICIAR EVALUACIÓN</button>
+</div>
+
+<!-- Examen -->
+<div id="p-exam" class="container hidden">
+    <div id="timer">TIEMPO GLOBAL: <span id="clock">60:00</span></div>
+    <div id="content"></div>
+</div>
+
+<!-- Revisión -->
+<div id="p-rev" class="container hidden">
+    <h2 style="color:var(--blue); text-align:center;">REPORTE DE DESEMPEÑO ESTRATÉGICO</h2>
+    <div id="rev-resumen"></div>
+    <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
+    <div id="rev-lista"></div>
+    <button class="btn" onclick="location.reload()" style="background:#21262d">CERRAR EXPEDIENTE</button>
+</div>
+
+<script>
+    const db = [
+        { p: "Caso Cimentación: Un equipo emprendedor desea internacionalizar un modelo 'Trendsetter'. Para asegurar que la idea tenga sustento real, se audita el diagnóstico del entorno.", q: "¿Qué premisas garantizan una cimentación estratégica sólida?", o: ["Análisis PESTEL completo, identificación de Gap de Mercado y sustento en macrotendencias de reportes oficiales.", "Proceso opcional basado en el conocimiento previo del país y estudio limitado a Benchmarking de competencia directa.", "Enfoque en variables sociales exclusivamente y redacción de misión genérica para ahorro de tiempo."], r: 0 },
+        { p: "Caso Riesgo de Relevancia: Durante la auditoría, el Consultor evalúa si el problema detectado justifica la inversión masiva en el extranjero mediante el análisis del Gap.", q: "¿Cuál conjunto de factores valida la relevancia del proyecto?", o: ["Gap basado en opiniones de redes sociales, MVP con diseño atractivo y diagnóstico opcional.", "Gap que represente un problema real, diagnóstico técnico-financiero lógico y datos PESTEL de fuentes reales.", "Validación del Gap únicamente por el costo de producción y eliminación de variables ecológicas."], r: 1 },
+        { p: "Caso Protocolo Empresarial: El equipo diseña su Fase 1 para asegurar la ejecución. Se evalúa la coherencia organizacional frente a los hallazgos del diagnóstico.", q: "¿Qué elementos aseguran la coherencia del diseño?", o: ["Misión genérica adaptable y área de TI opcional según la macrotendencia detectada.", "Organigrama que responda al diagnóstico, MVP como solución técnica lógica al Gap y filosofía alineada a la ejecución.", "Estructura basada en la jerarquía tradicional sin considerar las tendencias digitales del mercado destino."], r: 1 },
+        { p: "Caso Early Adopters: Para validar tracción inicial, se identifica al seguidor global que validará el modelo antes del escalamiento masivo.", q: "¿Qué premisas definen correctamente al target inicial?", o: ["Perfil específico de quienes sufren el problema, búsqueda activa de solución y reducción del riesgo de fracaso inicial.", "Target lo más amplio posible para maximizar ventas y validación mediante encuestas post-venta únicamente.", "Identificación basada en el poder adquisitivo general sin considerar el Gap de mercado detectado."], r: 0 },
+        { p: "Caso Línea Base: En la Fase 0 con Gemini, el sistema requiere que el equipo demuestre que la idea tiene sustento en inteligencia de mercado real.", q: "¿Qué requisitos otorgan el Semáforo Verde de validación?", o: ["Longitud extensa del reporte, datos PESTEL genéricos y Benchmarking descriptivo.", "Trendsetting sustentado en INEGI/Cámaras, Benchmarking que identifique debilidades y flujo secuencial aprobado.", "Diagnóstico estático sin actualizaciones y validación basada únicamente en la creatividad de la idea."], r: 1 },
+        { p: "Caso Plan de Comunicación: Se busca evitar publicidad genérica que no conecte con la cultura local del país seleccionado (Fase 1.4).", q: "¿Qué combinación mitiga el riesgo de rechazo global?", o: ["Branding idéntico al nacional, mensaje informativo de precio y uso de redes genéricas.", "Adaptación cultural del mensaje, branding que proyecte el Trendsetting y validación de coherencia técnica.", "Sustitución de adaptación por redes sociales internacionales y branding basado en diseño estético únicamente."], r: 1 },
+        { p: "Caso Selección de Canales: El equipo determina la vía eficiente para que la oferta exportable llegue al consumidor meta (Fase 1.5).", q: "¿Qué factores definen una operatividad eficiente?", o: ["Selección basada en el target, logística integrada y auditoría de respuesta al diseño organizacional.", "Canales directos obligatorios para control de margen y uso exclusivo de E-commerce para 2026.", "Gestión independiente de barreras arancelarias y selección basada en el costo de transporte únicamente."], r: 0 },
+        { p: "Caso Riesgo de Entrada: Para mitigar incertidumbre, el plan contempla una Red de Socios Clave (Fase 1.6) en el ecosistema local.", q: "¿Qué conjunto asegura una inmersión exitosa?", o: ["Red limitada a proveedores nacionales y socios locales solo por falta de capital.", "Aliados estratégicos para mitigar riesgos operativos, acuerdos alineados a objetivos y construcción de ecosistema de valor.", "Alianzas basadas únicamente en la legalidad del país destino sin considerar la cadena de valor."], r: 1 },
+        { p: "Caso Vehículos Jurídicos: Se analiza la entrada al mercado (Fase 2.4) buscando el método de menor riesgo e inversión inicial.", q: "¿Qué combinación técnica define los vehículos de entrada?", o: ["Licencias y franquicias por IP, contratos de fabricación y consorcios de exportación.", "Inversión extranjera directa como única opción y Joint Venture con asunción del 100% del riesgo.", "Regalías de franquicias como único ingreso y Joint Ventures basadas en opinión de socios."], r: 0 },
+        { p: "Caso Bloqueo Secuencial: El Auditor Maestro exige validar la Oferta Exportable antes de iniciar simulaciones de mercado real.", q: "¿Qué reglas rigen el Protocolo de Bloqueo Nivel 5?", o: ["Saltar fases si se tiene producto y procesamiento de tres fases simultáneamente por bloque.", "Línea base en Prompt 00, procesamiento de una fase por mensaje y auditoría previa a simulación con cliente.", "Bloqueo manual por el docente y validación basada en la longitud de los mensajes enviados."], r: 1 },
+        { p: "Caso Arquitectura de Valor: Se debe asegurar que el producto mantenga competitividad técnica y logística en el extranjero (Fase 6).", q: "¿Qué elementos integran una arquitectura de valor global?", o: ["Ingeniería de producto con normas técnicas, gestión de Incoterms y precio con aranceles/fletes.", "Empaque con función estética únicamente y arquitectura independiente de costos de distribución local.", "Certificados de origen opcionales y precio basado exclusivamente en el costo de producción nacional."], r: 0 },
+        { p: "Caso Resiliencia Logística: Se simula un quiebre en la cadena por huelga portuaria. El equipo debe demostrar capacidad de respuesta.", q: "¿Qué conjunto de medidas garantiza la resiliencia?", o: ["Esperar resolución del conflicto, seguro de transporte básico y gestión manual.", "Rutas alternas (aéreo/terrestre), inventarios de seguridad en destino y gestión de puntos críticos.", "Contratación de agentes aduanales adicionales y aumento de presupuesto de marketing."], r: 1 },
+        { p: "Caso Técnicas de Negociación: Se enfrenta a un socio agresivo. Se debe validar el estilo adaptado a la cultura (Fase 8).", q: "¿Qué tácticas aseguran un cierre de trato favorable?", o: ["Estilo adaptado a protocolos culturales, búsqueda de Ganar-Ganar e identificación del BATNA.", "Ceder ante todas las peticiones del socio y evitar contratos escritos por confianza.", "Respuesta violenta a la agresión y priorizar el cierre rápido sobre el margen."], r: 0 },
+        { p: "Caso Integridad Social: El Auditor verifica que las acciones de Sostenibilidad (Fase 9) no sean solo tácticas de marketing.", q: "¿Qué factores miden la integridad del valor social?", o: ["Integración de la comunidad local, coherencia entre impacto y operación, y sostenibilidad disruptiva.", "Donaciones globales genéricas, cumplimiento legal mínimo y marketing social tradicional.", "Traducción de manuales de ética y gasto social percibido como inversión publicitaria."], r: 0 },
+        { p: "Caso Veredicto Final: Al finalizar el Drill-down de 20 validaciones (Fase 10), se emite el dictamen de inversión.", q: "¿Qué criterios otorgan la viabilidad global del plan?", o: ["Éxito en la negociación final independientemente de las fallas en el diagnóstico inicial.", "Coherencia integral, respuesta técnica a riesgos detectados y aprobación de todas las fases técnicas.", "Resumen estético de resultados y cumplimiento del formato de reporte institucional."], r: 1 },
+        { p: "Caso Control Organizacional: Para asegurar cumplimiento de objetivos en el extranjero (2.6), se elige el mecanismo de monitoreo.", q: "¿Qué herramientas definen un control global efectivo?", o: ["KPIs en tiempo real, auditorías de calidad de marca y herramientas de gestión de proyectos.", "Centralización absoluta en México y delegación total del cumplimiento legal al socio local.", "Monitoreo basado en reportes de ventas anuales y control reactivo ante fallas locales."], r: 0 },
+        { p: "Caso Estructura de Control: Se analiza la decisión técnica entre Centralización vs. Descentralización para las oficinas en Tokio.", q: "¿Qué equilibrio garantiza la agilidad técnica local?", o: ["Centralización absoluta para aprovechamiento local y falta de intervención financiera de matriz.", "Descentralización para decisiones rápidas, equilibrio entre eficiencia y agilidad, y auditoría de cumplimiento.", "Control rígido de la matriz en todas las áreas y descentralización solo en marketing operativo."], r: 1 },
+        { p: "Caso Macrotendencia: En el diagnóstico PESTEL se identifica una tendencia tecnológica en salud para fundamentar el Trendsetting.", q: "¿Cómo se justifica ser un Trendsetter global?", o: ["Copiando el modelo del líder actual y basándose en el diagnóstico legal únicamente.", "Resolviendo un problema no solucionado internacionalmente, con base en macrotendencias y escalabilidad.", "Ignorando el diagnóstico económico y basando la innovación en la creatividad interna."], r: 1 },
+        { p: "Caso Tracción de Modelo: Se evalúa la aceptación lógica del MVP mediante inteligencia de mercado antes de buscar socios (1.3).", q: "¿Cómo se valida científicamente la tracción?", o: ["Interés real de Early Adopters, datos reales de Gap como negocio viable y uso de fuentes primarias.", "Calidad estética del prototipo únicamente y conceptos teóricos de mercado sin cuantificación.", "Validación basada en la opinión del equipo emprendedor y Benchmarking descriptivo."], r: 0 },
+        { p: "Caso Certificado Gemini: El documento avala la solidez del diseño. Se deben cumplir parámetros administrativos de acreditación.", q: "¿Qué requisitos validan técnicamente el proyecto?", o: ["Obtención automática al cargar archivos y sustitución del reporte diagnóstico por el certificado.", "Semáforo Verde indispensable, evaluación de coherencia integral y límite máximo de 8 faltas.", "Carga masiva de prompts y validación basada en la longitud del reporte final entregado."], r: 1 },
+        { p: "Caso Alianzas de Capital: Durante la negociación (2.4), se busca asegurar una relación duradera ante diferencias culturales.", q: "¿Qué tácticas mitigan el conflicto y aseguran estabilidad?", o: ["Estilo adaptado, transparencia en activos compartidos, protocolos de etiqueta y modelo Ganar-Ganar.", "Negociación agresiva para asegurar control y priorizar cierre rápido sobre la ética comercial.", "Ocultamiento de información crítica por seguridad y negociación basada en jerarquía de matriz."], r: 0 },
+        { p: "Caso Riesgo de Ejecución: Se evalúa el MVP (1.2) frente al diagnóstico para demostrar que es ejecutable en el extranjero.", q: "¿Qué factores reducen el riesgo de ejecución?", o: ["Presupuesto publicitario masivo y estructura organizacional jerárquica tradicional.", "MVP como respuesta lógica al Gap, organigrama funcional y perfiles con competencias globales.", "Validación basada en la estética del diseño y eliminación de áreas de soporte técnico."], r: 1 },
+        { p: "Caso Comunidad Local: Al integrar Valor Social, la empresa busca legitimidad internacional frente a la percepción de marca.", q: "¿Qué conjunto asegura la legitimidad y resiliencia?", o: ["Generación de valor social real, beneficios tangibles a la comunidad y auditoría de integridad.", "Traducción de manuales de ética y percepción de la RS como gasto necesario para marketing.", "Acciones éticas limitadas al cumplimiento legal mínimo exigido por el país destino."], r: 0 },
+        { p: "Caso Ruta Estratégica: La Unidad 1 establece el orden lógico de ingeniería para la internacionalización.", q: "¿Cuál es el cimiento de la ruta para reducir la incertidumbre?", o: ["Idea creativa del producto innovador y marketing internacional como paso inicial.", "Ruta lineal donde el diseño estructural es el primer paso sin considerar el PESTEL.", "Diagnóstico estratégico (PESTEL/Gap), validación de target y diseño estructural previo a la entrada.",], r: 2 },
+        { p: "Caso Integridad Académica: El Auditor bloquea la práctica si detecta Patrones de Automatización Masiva.", q: "¿Por qué el sistema exige un procesamiento etapa por etapa?", o: ["Para asegurar aprendizaje profundo, proteger la integridad del proceso y validar cada variable técnica.", "Para facilitar la carga masiva de prompts y asegurar que la IA analice la coherencia estática.", "Para permitir que el equipo termine más rápido sustituyendo la auditoría por el reporte escrito."], r: 0 }
+    ];
+
+    let user = {}, exam = [], userAnswers = [], current = 0, score = 0, timeLeft = 3600, qTime = 80;
+    let qTimer, gTimer;
+
+    function iniciarExamen() {
+        const n = document.getElementById('nom').value;
+        const m = document.getElementById('mat').value;
+        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación válidos para validar su sesión.");
+        
+        user = { n, m, sid: Math.random().toString(36).substr(2,9).toUpperCase() };
+        document.getElementById('watermark').innerHTML = `${user.n}<br>${user.m}<br>${user.sid}`;
+        
+        exam = db.sort(() => Math.random() - 0.5); 
+        document.getElementById('p-reg').classList.add('hidden');
+        document.getElementById('p-exam').classList.remove('hidden');
+        
+        document.onkeydown = (e) => {
+            if(e.key === "PrintScreen" || e.keyCode === 44) { lockSystem("Captura de pantalla detectada."); return false; }
+            if(e.ctrlKey || e.metaKey || e.altKey || (e.keyCode >= 112 && e.keyCode <= 123)) return false;
+        };
+
+        render();
+        gTimer = setInterval(updateGlobal, 1000);
+    }
+
+    function lockSystem(msg) {
+        clearInterval(qTimer); clearInterval(gTimer);
+        document.getElementById('lock-msg').innerText = msg;
+        document.getElementById('lock').style.display = 'block';
+        setTimeout(() => location.reload(), 3000);
+    }
+
+    window.onblur = () => { if(current < 25) lockSystem("Salida de ventana o cambio de pestaña detectado."); };
+
+    function updateGlobal() {
+        if(timeLeft > 0) {
+            timeLeft--;
+            document.getElementById('clock').innerText = `${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}`;
+        } else { finish(); }
+    }
+
+    function render() {
+        if(current >= 25) return finish();
+        clearInterval(qTimer);
+        qTime = 80;
+        qTimer = setInterval(() => {
+            qTime--;
+            document.getElementById('timer-bar').style.width = (qTime/80)*100 + "%";
+            if(qTime <= 0) lockSystem("Tiempo agotado en el reactivo (80s).");
+        }, 1000);
+
+        const d = exam[current];
+        document.getElementById('content').innerHTML = `
+            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">AUDITORÍA DE CASO ${current+1} DE 25</div>
+            <div class="planteamiento">${d.p}</div>
+            <h3 style="color:#fff; margin-bottom:20px;">${d.q}</h3>
+            ${d.o.map((o, i) => `<div class="option" onclick="saveAns(${i})">${o}</div>`).join('')}
+        `;
+    }
+
+    function saveAns(idx) {
+        userAnswers.push(idx);
+        if(idx === exam[current].r) score++;
+        current++;
+        render();
+    }
+
+    function finish() {
+        clearInterval(qTimer); clearInterval(gTimer);
+        document.getElementById('timer-bar').style.display = 'none';
+        const nota = ((score / 25) * 10).toFixed(2);
+        
+        // --- CONEXIÓN DE BASE DE DATOS DEFINITIVA (FORMS RESPONSES) ---
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
+        
+        const params = new URLSearchParams();
+        params.append("entry.2005620554", user.n); // Nombre
+        params.append("entry.1045792443", user.mat); // Matrícula
+        params.append("entry.1065046570", nota); // Nota
+        params.append("entry.1166974658", `PNI-C1-2026. Aciertos: ${score}/25. Folio: ${user.sid}`); // Errores/ID
+
+        fetch(formURL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString()
+        });
+
+        showResults(nota);
+    }
+
+    function showResults(nota) {
+        document.getElementById('p-exam').classList.add('hidden');
+        document.getElementById('p-rev').classList.remove('hidden');
+        document.body.style.overflow = "auto"; 
+
+        document.getElementById('rev-resumen').innerHTML = `
+            <div style="text-align:center; background:#0d1117; padding:25px; border-radius:10px; border:2px solid var(--blue);">
+                <p>Candidato: <strong>${user.n}</strong> | Matrícula: <strong>${user.sid}</strong></p>
+                <div style="font-size:4em; color:var(--uvm); font-weight:bold; margin:10px 0;">${nota}</div>
+                <p style="letter-spacing:2px; font-size:0.85em; color:var(--blue);">AUDITORÍA DE COMPETENCIAS CONCLUIDA</p>
+            </div>`;
+
+        let h = "";
+        exam.forEach((p, i) => {
+            const ok = userAnswers[i] === p.r;
+            h += `<div class="rev-card ${ok?'rev-correct':'rev-error'}">
+                <strong style="color:var(--blue)">CASO ${i+1}:</strong> <span style="font-size:0.9em;">${p.p}</span><br><br>
+                <p style="color:${ok?'var(--green)':'var(--red)'}; margin:0;"><strong>Tesis seleccionada:</strong> ${p.o[userAnswers[i]]}</p>
+                ${!ok?`<p style="color:var(--green); margin-top:10px;"><strong>Fundamentación Correcta:</strong> ${p.o[p.r]}</p>`:''}
+            </div>`;
+        });
+        document.getElementById('rev-lista').innerHTML = h;
+        window.scrollTo(0,0);
+    }
+</script>
+</body>
+</html>
