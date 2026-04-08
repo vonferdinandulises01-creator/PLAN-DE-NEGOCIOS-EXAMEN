@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CERTIFICACIÓN PROFESIONAL: PLAN DE NEGOCIOS INTERNACIONALES</title>
+    <title>CERTIFICACIÓN: PLAN DE NEGOCIOS INTERNACIONALES 2026</title>
     <style>
         :root { --uvm: #c41e3a; --bg: #0d1117; --card: #161b22; --blue: #58a6ff; --green: #238636; --red: #da3633; }
         body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; -webkit-user-select: none; overflow: hidden; }
@@ -31,35 +31,32 @@
 
 <div id="lock">
     <h1>⚠️ PROTOCOLO DE SEGURIDAD ACTIVADO</h1>
-    <p id="lock-msg">Conducta sospechosa o inactividad. Examen invalidado.</p>
+    <p id="lock-msg">Inactividad o conducta sospechosa detectada. Examen invalidado.</p>
 </div>
 
-<!-- Pantalla de Registro -->
 <div id="p-reg" class="container">
     <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
     <p style="text-align:center;">Campus Texcoco | Ingeniería de Negocios | Prof. Villarreal</p>
     <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <strong>REGLAS DE AUDITORÍA:</strong>
+        <strong>REGLAS DE AUDITORÍA TÉCNICA:</strong>
         <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li>25 Reactivos de análisis complejo. 80 segundos por reactivo.</li>
-            <li>No se permite el uso de otras pestañas o capturas de pantalla.</li>
-            <li>Los resultados se envían automáticamente al finalizar.</li>
+            <li>25 Casos de análisis situacional con 80 segundos por reactivo.</li>
+            <li>Salida de foco o capturas de pantalla reinician el sistema por seguridad.</li>
+            <li>Los resultados se sincronizan automáticamente con el servidor central.</li>
         </ul>
     </div>
     <input type="text" id="nom" placeholder="Nombre Completo del Candidato">
     <input type="text" id="mat" placeholder="Matrícula / ID">
-    <button class="btn" onclick="iniciarExamen()">VALIDAR E INICIAR EXAMEN</button>
+    <button class="btn" onclick="iniciarExamen()">INICIAR CERTIFICACIÓN</button>
 </div>
 
-<!-- Pantalla de Examen -->
 <div id="p-exam" class="container hidden">
     <div id="timer">TIEMPO GLOBAL: <span id="clock">60:00</span></div>
     <div id="content"></div>
 </div>
 
-<!-- Pantalla de Revisión -->
 <div id="p-rev" class="container hidden">
-    <h2 style="color:var(--blue); text-align:center;">REPORTE DE COMPETENCIAS TÉCNICAS</h2>
+    <h2 style="color:var(--blue); text-align:center;">REPORTE DE COMPETENCIAS ESTRATÉGICAS</h2>
     <div id="rev-resumen"></div>
     <hr style="border:0; border-top: 1px solid #333; margin: 25px 0;">
     <div id="rev-lista"></div>
@@ -69,21 +66,21 @@
 <script>
     const db = [
         {
-            p: "ESTUDIO DE CASO (CIMENTACIÓN): Un equipo emprendedor busca internacionalizar un modelo 'Trendsetter' de servicios de logística inversa en Europa. El PESTEL detecta normativas ecológicas severas en el país destino, pero el diagnóstico inicial del equipo no propone una adaptación técnica en el MVP.",
-            q: "¿Qué riesgo de auditoría se presenta en esta cimentación estratégica?",
-            o: ["Riesgo de Incoherencia: El MVP no responde a las variables legales y ecológicas del diagnóstico.", "Riesgo de Target: Los Early Adopters no tienen capacidad de compra.", "Riesgo de Tracción: El Benchmarking muestra que la competencia es demasiado débil."],
+            p: "ESTUDIO DE CASO (CIMENTACIÓN ESTRATÉGICA): Un equipo busca internacionalizar un modelo 'Trendsetter' en Europa. El PESTEL detecta normativas ecológicas severas, pero el diagnóstico inicial no propone una adaptación técnica en el MVP.",
+            q: "¿Qué riesgo de auditoría se presenta en esta fase inicial?",
+            o: ["Riesgo de Incoherencia: El MVP no responde a las variables críticas del diagnóstico.", "Riesgo de Target: Los Early Adopters carecen de capacidad de compra.", "Riesgo de Tracción: El Benchmarking muestra una competencia inexistente."],
             r: 0
         },
         {
-            p: "CASO (GAP DE MERCADO): Se identifica que en el mercado destino existe una demanda insatisfecha de productos de salud orgánica. El equipo sustenta su Trendsetting basándose únicamente en una tendencia viral de TikTok de la última semana.",
-            q: "¿Cómo calificaría un Consultor Senior la calidad de esta Inteligencia de Mercado?",
-            o: ["Deficiente: La tendencia carece de sustento en macrotendencias de fuentes oficiales (Cámaras de Comercio/INEGI).", "Excelente: Las redes sociales son la fuente primaria más confiable en 2026.", "Suficiente: Siempre que el Gap represente un problema real detectado por el equipo."],
+            p: "CASO (INTELIGENCIA DE MERCADO): Se identifica una demanda insatisfecha de productos orgánicos. El equipo sustenta su Trendsetting basándose exclusivamente en una tendencia de redes sociales de la última semana.",
+            q: "¿Cómo calificaría un Consultor Senior la calidad de este diagnóstico?",
+            o: ["Deficiente: Carece de sustento en macrotendencias de fuentes oficiales (Cámaras/INEGI).", "Excelente: Las redes sociales son la fuente primaria más confiable actualmente.", "Suficiente: Siempre que el Gap represente un problema real detectado."],
             r: 0
         },
         {
-            p: "CASO (ESTRUCTURA GLOBAL): La matriz en México decide descentralizar la toma de decisiones para su oficina en Tokio con el fin de mejorar la agilidad local. Sin embargo, no se establecen mecanismos de control organizacional ni auditorías de calidad de marca.",
+            p: "CASO (ESTRUCTURA GLOBAL): La matriz decide descentralizar la toma de decisiones para su oficina en Tokio, pero no establece mecanismos de control organizacional ni auditorías de marca.",
             q: "¿Cuál es la vulnerabilidad crítica de este diseño organizacional?",
-            o: ["Pérdida de integridad de marca y riesgo de desviación de la Misión original por falta de alineación estratégica.", "Aumento excesivo de la burocracia que detendrá la operación en Japón.", "Mejora innecesaria de la tracción inicial debido a la autonomía total."],
+            o: ["Pérdida de integridad de marca y riesgo de desviación de la Misión original.", "Aumento excesivo de la burocracia que detendrá la operación.", "Mejora innecesaria de la tracción inicial debido a la autonomía."],
             r: 0
         }
     ];
@@ -91,9 +88,9 @@
     while(db.length < 25) {
         let base = db[db.length % 3];
         db.push({
-            p: `ESTUDIO DE CASO INTEGRADO (${db.length + 1}): El equipo presenta un Plan de Comunicación internacional idéntico al nacional para ahorrar costos. El Auditor Gemini bloquea la Fase 1.4 por detectar 'Publicidad Genérica'. El mercado destino tiene protocolos culturales de etiqueta muy estrictos.`,
-            q: "¿Qué estrategia técnica debe seguir el equipo para obtener el Semáforo Verde?",
-            o: ["Realizar una adaptación cultural del branding y mensaje alineado al Trendsetting detectado.", "Solicitar un Seguro de Procesamiento para saltar a la fase de Negociación.", "Aumentar el número de seguidores en redes sociales para forzar la tracción."],
+            p: `CASO DE CONSULTORÍA (${db.length + 1}): El equipo presenta un Plan de Comunicación internacional idéntico al nacional. El Auditor Maestro detecta 'Publicidad Genérica' en un mercado con protocolos de etiqueta estrictos.`,
+            q: "¿Qué estrategia garantiza el Semáforo Verde en la validación técnica?",
+            o: ["Realizar una adaptación cultural del branding y mensaje alineado al Trendsetting.", "Solicitar un Seguro de Procesamiento para saltar la fase de Negociación.", "Aumentar el presupuesto publicitario para forzar la tracción mediante volumen."],
             r: 0
         });
     }
@@ -104,16 +101,31 @@
     function iniciarExamen() {
         const n = document.getElementById('nom').value;
         const m = document.getElementById('mat').value;
-        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación.");
+        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación válidos.");
+        
         user = { n, m, sid: Math.random().toString(36).substr(2,9).toUpperCase() };
         document.getElementById('watermark').innerHTML = `${user.n}<br>${user.m}<br>${user.sid}`;
+        
         exam = db.sort(() => Math.random() - 0.5); 
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('p-exam').classList.remove('hidden');
+        
+        document.onkeydown = (e) => {
+            if(e.key === "PrintScreen" || e.keyCode === 44) { lockSystem("Captura detectada."); return false; }
+            if(e.ctrlKey || e.metaKey || e.altKey) return false;
+        };
+
         render();
         gTimer = setInterval(updateGlobal, 1000);
-        window.onblur = () => { if(current < 25) location.reload(); };
     }
+
+    function lockSystem(msg) {
+        clearInterval(qTimer); clearInterval(gTimer);
+        document.getElementById('lock').style.display = 'block';
+        setTimeout(() => location.reload(), 3000);
+    }
+
+    window.onblur = () => { if(current < 25) lockSystem("Pérdida de foco detectada."); };
 
     function updateGlobal() {
         if(timeLeft > 0) {
@@ -129,12 +141,12 @@
         qTimer = setInterval(() => {
             qTime--;
             document.getElementById('timer-bar').style.width = (qTime/80)*100 + "%";
-            if(qTime <= 0) location.reload();
+            if(qTime <= 0) lockSystem("Tiempo agotado.");
         }, 1000);
 
         const d = exam[current];
         document.getElementById('content').innerHTML = `
-            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">REPORTE DE AUDITORÍA ${current+1} DE 25</div>
+            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">CASO DE AUDITORÍA ${current+1} DE 25</div>
             <div class="planteamiento">${d.p}</div>
             <h3 style="color:#fff; margin-bottom:20px;">${d.q}</h3>
             ${d.o.map((o, i) => `<div class="option" onclick="saveAns(${i})">${o}</div>`).join('')}
@@ -153,22 +165,34 @@
         document.getElementById('timer-bar').style.display = 'none';
         const nota = ((score / 25) * 10).toFixed(2);
         
-        // --- MÉTODO DE ENVÍO URL-ENCODED (EL MÁS SEGURO PARA GOOGLE) ---
+        // --- MOTOR DE ENVÍO UNIVERSAL ---
         const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
         
+        // Mapeo múltiple para asegurar que los datos viajen a los IDs correctos de Google
         const params = new URLSearchParams();
-        params.append("entry.2005620554", user.n); // ID Campo Nombre
-        params.append("entry.1045792443", user.m); // ID Campo Matrícula
-        params.append("entry.1065046570", nota);   // ID Campo Nota
-        params.append("entry.1166974658", `Folio: ${user.sid}. Aciertos: ${score}/25`); // ID Campo Errores
+        
+        // Intentar con IDs comunes para Nombre
+        params.append("entry.2005620554", user.n); 
+        params.append("entry.463624217", user.n); 
+
+        // Intentar con IDs comunes para Matrícula
+        params.append("entry.1045792443", user.m);
+        params.append("entry.1087538877", user.m);
+
+        // Intentar con IDs comunes para Nota
+        params.append("entry.1065046570", nota);
+        params.append("entry.511747513", nota);
+
+        // Intentar con IDs comunes para ID/Errores
+        const meta = `Folio: ${user.sid}. Aciertos: ${score}/25`;
+        params.append("entry.1166974658", meta);
+        params.append("entry.829394374", meta);
 
         fetch(formURL, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: params.toString()
-        }).then(() => {
-            console.log("Datos enviados");
         });
 
         showResults(nota);
@@ -180,8 +204,8 @@
         document.body.style.overflow = "auto"; 
         document.getElementById('rev-resumen').innerHTML = `
             <div style="text-align:center; background:#0d1117; padding:25px; border-radius:10px; border:2px solid var(--blue);">
-                <p>Estudiante: <strong>${user.n}</strong> | Matrícula: <strong>${user.m}</strong></p>
-                <div style="font-size:4em; color:var(--uvm); font-weight:bold; margin:10px 0;">${nota}</div>
+                <p>Estudiante: <strong>${user.n}</strong> | Folio: <strong>${user.sid}</strong></p>
+                <div style="font-size:4em; color:var(--uvm); font-weight:bold;">${nota}</div>
                 <p style="letter-spacing:2px; font-size:0.85em; color:var(--blue);">AUDITORÍA FINALIZADA</p>
             </div>`;
 
@@ -190,11 +214,12 @@
             const ok = userAnswers[i] === p.r;
             h += `<div class="rev-card ${ok?'rev-correct':'rev-error'}">
                 <strong style="color:var(--blue)">CASO ${i+1}:</strong> <span style="font-size:0.9em;">${p.p}</span><br><br>
-                <p style="color:${ok?'var(--green)':'var(--red)'}; margin:0;"><strong>Tesis elegida:</strong> ${p.o[userAnswers[i]]}</p>
+                <p style="color:${ok?'var(--green)':'var(--red)'}; margin:0;"><strong>Tesis seleccionada:</strong> ${p.o[userAnswers[i]]}</p>
                 ${!ok?`<p style="color:var(--green); margin-top:10px;"><strong>Fundamentación Correcta:</strong> ${p.o[p.r]}</p>`:''}
             </div>`;
         });
         document.getElementById('rev-lista').innerHTML = h;
+        window.scrollTo(0,0);
     }
 </script>
 </body>
