@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CERTIFICACIÓN: PLAN DE NEGOCIOS INTERNACIONALES 2026</title>
+    <title>CERTIFICACIÓN PROFESIONAL: PLAN DE NEGOCIOS INTERNACIONALES</title>
     <style>
         :root { --uvm: #c41e3a; --bg: #0d1117; --card: #161b22; --blue: #58a6ff; --green: #238636; --red: #da3633; }
         body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; -webkit-user-select: none; overflow: hidden; }
         #lock { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; color: var(--uvm); text-align: center; padding-top: 20%; }
-        #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; line-height: 1.5; }
-        .container { max-width: 1050px; margin: 25px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
+        #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3.5vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; }
+        .container { max-width: 1000px; margin: 25px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
         #timer-bar { height: 6px; background: var(--blue); width: 100%; position: fixed; top: 0; left: 0; transition: width 1s linear; z-index: 1000; }
         #timer { background: var(--uvm); color: white; padding: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; border-radius: 4px; letter-spacing: 1px; }
         .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.7; font-size: 1.05em; color: #f0f6fc; text-align: justify; }
@@ -29,25 +29,28 @@
 <div id="timer-bar"></div>
 <div id="watermark"></div>
 
+<!-- iFrame invisible para el envío de datos -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {showResults(notaFinal);}"></iframe>
+
 <div id="lock">
     <h1>⚠️ PROTOCOLO DE SEGURIDAD ACTIVADO</h1>
-    <p id="lock-msg">Inactividad o conducta sospechosa detectada. Examen invalidado.</p>
+    <p id="lock-msg">Conducta sospechosa o inactividad. Examen invalidado.</p>
 </div>
 
 <div id="p-reg" class="container">
-    <h2 style="color:var(--uvm); text-align:center;">CERTIFICACIÓN PROFESIONAL C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
-    <p style="text-align:center;">Ingeniería de Negocios | Campus Texcoco | Prof. Villarreal</p>
+    <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
+    <p style="text-align:center;">Campus Texcoco | Ingeniería de Negocios | Prof. Villarreal</p>
     <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <strong>PROTOCOLOS DE EVALUACIÓN:</strong>
+        <strong>REGLAS DE AUDITORÍA:</strong>
         <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li>25 Casos de análisis situacional (Nivel Consultoría Senior).</li>
-            <li>80 segundos de límite por reactivo con bloqueo de sistema.</li>
-            <li>Sincronización forzada con el MIS institucional al finalizar.</li>
+            <li>25 Casos de análisis complejo (Nivel Ingeniería).</li>
+            <li>80 segundos por reactivo. No se permite salida de ventana.</li>
+            <li>El reporte se genera automáticamente al finalizar.</li>
         </ul>
     </div>
-    <input type="text" id="nom" placeholder="Nombre Completo del Candidato">
-    <input type="text" id="mat" placeholder="ID / Matrícula">
-    <button class="btn" onclick="iniciarExamen()">VALIDAR E INICIAR EXAMEN</button>
+    <input type="text" id="nom" placeholder="Nombre Completo">
+    <input type="text" id="mat" placeholder="Matrícula">
+    <button class="btn" onclick="iniciarExamen()">INICIAR EVALUACIÓN ESTRATÉGICA</button>
 </div>
 
 <div id="p-exam" class="container hidden">
@@ -56,77 +59,61 @@
 </div>
 
 <div id="p-rev" class="container hidden">
-    <h2 style="color:var(--blue); text-align:center;">AUDITORÍA DE DESEMPEÑO ESTRATÉGICO</h2>
+    <h2 style="color:var(--blue); text-align:center;">REPORTE DE COMPETENCIAS TÉCNICAS</h2>
     <div id="rev-resumen"></div>
     <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
     <div id="rev-lista"></div>
-    <button class="btn" onclick="location.reload()" style="background:#21262d">FINALIZAR SESIÓN</button>
+    <button class="btn" onclick="location.reload()" style="background:#21262d">SALIR DEL SISTEMA</button>
 </div>
 
 <script>
     const db = [
         {
-            p: "CASO 1 (MERCADOS EMERGENTES): Una firma de tecnología busca entrar al sudeste asiático. El diagnóstico PESTEL revela una volatilidad inflacionaria del 15% y una brecha digital del 40% en zonas rurales. El equipo propone un MVP de alta gama.",
-            q: "¿Cuál es el error estratégico fundamental en este planteamiento de cimentación?",
-            o: ["Falta de alineación entre el Gap de mercado (brecha digital) y la sofisticación técnica del MVP propuesto.", "Exceso de análisis en variables económicas y falta de enfoque en el diseño estético del prototipo.", "El PESTEL no es necesario si ya se cuenta con un socio estratégico local en el país destino."],
+            p: "ESTUDIO DE CASO (CIMENTACIÓN): Un equipo emprendedor busca internacionalizar un modelo 'Trendsetter' en servicios de logística inversa en Europa. El PESTEL detecta normativas ecológicas severas en el país destino, pero el diagnóstico inicial del equipo no propone una adaptación técnica en el MVP.",
+            q: "¿Qué riesgo de auditoría se presenta en esta cimentación estratégica?",
+            o: ["Riesgo de Incoherencia: El MVP no responde a las variables legales y ecológicas del diagnóstico.", "Riesgo de Target: Los Early Adopters no tienen capacidad de compra.", "Riesgo de Tracción: El Benchmarking muestra que la competencia es demasiado débil."],
             r: 0
         },
         {
-            p: "CASO 2 (INTELIGENCIA DE MERCADO): En la Fase 0, el Auditor Gemini detecta que el Benchmarking del equipo solo incluye precios de venta de competidores locales, omitiendo sus debilidades logísticas y barreras arancelarias de entrada.",
-            q: "¿Qué requisito técnico es indispensable para obtener el 'Semáforo Verde' de validación estratégica?",
-            o: ["Identificación de Gaps operativos en la competencia para fundamentar la ventaja competitiva del Trendsetter.", "Presentación de un reporte extenso con capturas de pantalla de sitios web extranjeros sin análisis técnico.", "Basar la entrada exclusivamente en el precio más bajo para ganar tracción rápida."],
+            p: "CASO (GAP DE MERCADO): Se identifica que en el mercado destino existe una demanda insatisfecha de productos de salud orgánica. El equipo sustenta su Trendsetting basándose únicamente en una tendencia viral de TikTok de la última semana.",
+            q: "¿Cómo calificaría un Consultor Senior la calidad de esta Inteligencia de Mercado?",
+            o: ["Deficiente: La tendencia carece de sustento en macrotendencias de fuentes oficiales (Cámaras de Comercio/INEGI).", "Excelente: Las redes sociales son la fuente primaria más confiable en 2026.", "Suficiente: Siempre que el Gap represente un problema real detectado por el equipo."],
             r: 0
         },
         {
-            p: "CASO 3 (DISEÑO ORGANIZACIONAL): El diagnóstico estratégico exige una operación con alta capacidad de respuesta a crisis (Agile). Sin embargo, el equipo diseña un organigrama jerárquico-funcional con 5 niveles de aprobación centralizados en México.",
-            q: "¿Cómo impacta esta decisión en la resiliencia del Plan de Negocios Internacionales?",
-            o: ["Genera cuellos de botella que impiden la adaptación local, invalidando la coherencia entre diagnóstico y ejecución.", "Fortalece el control de la matriz y asegura que no se pierda la filosofía original de la empresa.", "No tiene impacto relevante si el producto tiene una alta demanda en el mercado seleccionado."],
+            p: "CASO (ESTRUCTURA GLOBAL): La matriz en México decide descentralizar la toma de decisiones para su oficina en Tokio con el fin de mejorar la agilidad local. Sin embargo, no se establecen mecanismos de control organizacional ni auditorías de calidad de marca.",
+            q: "¿Cuál es la vulnerabilidad crítica de este diseño organizacional?",
+            o: ["Pérdida de integridad de marca y riesgo de desviación de la Misión original por falta de alineación estratégica.", "Aumento excesivo de la burocracia que detendrá la operación en Japón.", "Mejora innecesaria de la tracción inicial debido a la autonomía total."],
             r: 0
         }
-        // ... (Se autogeneran 25 reactivos de este nivel de profundidad)
     ];
 
     while(db.length < 25) {
         let base = db[db.length % 3];
         db.push({
-            p: `CASO ${db.length + 1} (AUDITORÍA DE RIESGO): Durante la simulación de entrada (Fase ${Math.floor(db.length/3)}), el sistema detecta que la Red de Socios Clave no mitiga los riesgos legales identificados en el PESTEL. El Auditor bloquea el proceso por inconsistencia técnica.`,
-            q: "¿Cuál es la acción correctiva obligatoria para asegurar la integridad del modelo de ingeniería?",
-            o: ["Reingeniería de la Fase de Socios para alinear las alianzas con los riesgos específicos de la macrotendencia.", "Solicitar al Auditor Gemini que ignore la advertencia para proceder a la fase de estimación financiera.", "Aumentar el presupuesto de marketing para compensar las deficiencias en el diseño legal y operativo."],
+            p: `ESTUDIO DE CASO INTEGRADO (${db.length + 1}): El equipo presenta un Plan de Comunicación internacional idéntico al nacional para ahorrar costos. El Auditor Gemini bloquea la Fase 1.4 por detectar 'Publicidad Genérica'. El mercado destino tiene protocolos culturales de etiqueta muy estrictos.`,
+            q: "¿Qué estrategia técnica debe seguir el equipo para obtener el Semáforo Verde?",
+            o: ["Realizar una adaptación cultural del branding y mensaje alineado al Trendsetting detectado.", "Solicitar un Seguro de Procesamiento para saltar a la fase de Negociación.", "Aumentar el número de seguidores en redes sociales para forzar la tracción."],
             r: 0
         });
     }
 
     let user = {}, exam = [], userAnswers = [], current = 0, score = 0, timeLeft = 3600, qTime = 80;
-    let qTimer, gTimer;
+    let qTimer, gTimer, submitted = false, notaFinal = 0;
 
     function iniciarExamen() {
         const n = document.getElementById('nom').value;
         const m = document.getElementById('mat').value;
-        if(n.length < 5 || m.length < 3) return alert("Ingrese datos válidos.");
-        
+        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación.");
         user = { n, m, sid: Math.random().toString(36).substr(2,9).toUpperCase() };
         document.getElementById('watermark').innerHTML = `${user.n}<br>${user.m}<br>${user.sid}`;
-        
         exam = db.sort(() => Math.random() - 0.5); 
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('p-exam').classList.remove('hidden');
-        
-        document.onkeydown = (e) => {
-            if(e.key === "PrintScreen" || e.keyCode === 44) { lockSystem("Captura detectada."); return false; }
-            if(e.ctrlKey || e.metaKey) return false;
-        };
-
         render();
         gTimer = setInterval(updateGlobal, 1000);
+        window.onblur = () => { if(current < 25) location.reload(); };
     }
-
-    function lockSystem(msg) {
-        clearInterval(qTimer); clearInterval(gTimer);
-        document.getElementById('lock').style.display = 'block';
-        setTimeout(() => location.reload(), 3000);
-    }
-
-    window.onblur = () => { if(current < 25) lockSystem("Salida de ventana detectada."); };
 
     function updateGlobal() {
         if(timeLeft > 0) {
@@ -142,12 +129,12 @@
         qTimer = setInterval(() => {
             qTime--;
             document.getElementById('timer-bar').style.width = (qTime/80)*100 + "%";
-            if(qTime <= 0) lockSystem("Tiempo agotado.");
+            if(qTime <= 0) location.reload();
         }, 1000);
 
         const d = exam[current];
         document.getElementById('content').innerHTML = `
-            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">REPORTE TÉCNICO ${current+1} DE 25</div>
+            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">REPORTE DE AUDITORÍA ${current+1} DE 25</div>
             <div class="planteamiento">${d.p}</div>
             <h3 style="color:#fff; margin-bottom:20px;">${d.q}</h3>
             ${d.o.map((o, i) => `<div class="option" onclick="saveAns(${i})">${o}</div>`).join('')}
@@ -164,26 +151,35 @@
     function finish() {
         clearInterval(qTimer); clearInterval(gTimer);
         document.getElementById('timer-bar').style.display = 'none';
-        const nota = ((score / 25) * 10).toFixed(2);
+        notaFinal = ((score / 25) * 10).toFixed(2);
         
-        // --- CONEXIÓN DE BASE DE DATOS DEFINITIVA (REVISADA) ---
-        // Estos IDs de entry deben existir en tu formulario para que los datos viajen
-        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
+        // --- MÉTODO DE ENVÍO POR FORMULARIO OCULTO ---
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
+        form.target = "hidden_iframe";
+
+        const fields = {
+            "entry.2005620554": user.n,
+            "entry.1045792443": user.m,
+            "entry.1065046570": notaFinal,
+            "entry.1166974658": `Folio: ${user.sid}. Aciertos: ${score}/25`
+        };
+
+        for (let key in fields) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = fields[key];
+            form.appendChild(input);
+        }
+
+        submitted = true;
+        document.body.appendChild(form);
+        form.submit();
         
-        const params = new URLSearchParams();
-        params.append("entry.2005620554", user.n);
-        params.append("entry.1045792443", user.m);
-        params.append("entry.1065046570", nota);
-        params.append("entry.1166974658", `PNI-FINAL. Aciertos: ${score}/25. ID: ${user.sid}`);
-
-        fetch(formURL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: params.toString()
-        }).then(() => console.log("Datos enviados satisfactoriamente"));
-
-        showResults(nota);
+        // Fallback: Si el iFrame no carga por alguna razón, mostramos resultados después de 1 segundo
+        setTimeout(() => { if(submitted) showResults(notaFinal); }, 1000);
     }
 
     function showResults(nota) {
@@ -192,7 +188,7 @@
         document.body.style.overflow = "auto"; 
         document.getElementById('rev-resumen').innerHTML = `
             <div style="text-align:center; background:#0d1117; padding:25px; border-radius:10px; border:2px solid var(--blue);">
-                <p>Estudiante: <strong>${user.n}</strong> | Folio: <strong>${user.sid}</strong></p>
+                <p>Estudiante: <strong>${user.n}</strong> | Matrícula: <strong>${user.m}</strong></p>
                 <div style="font-size:4em; color:var(--uvm); font-weight:bold; margin:10px 0;">${nota}</div>
                 <p style="letter-spacing:2px; font-size:0.85em; color:var(--blue);">AUDITORÍA FINALIZADA</p>
             </div>`;
@@ -202,12 +198,11 @@
             const ok = userAnswers[i] === p.r;
             h += `<div class="rev-card ${ok?'rev-correct':'rev-error'}">
                 <strong style="color:var(--blue)">CASO ${i+1}:</strong> <span style="font-size:0.9em;">${p.p}</span><br><br>
-                <p style="color:${ok?'var(--green)':'var(--red)'}; margin:0;"><strong>Respuesta del alumno:</strong> ${p.o[userAnswers[i]]}</p>
+                <p style="color:${ok?'var(--green)':'var(--red)'}; margin:0;"><strong>Tesis elegida:</strong> ${p.o[userAnswers[i]]}</p>
                 ${!ok?`<p style="color:var(--green); margin-top:10px;"><strong>Fundamentación Correcta:</strong> ${p.o[p.r]}</p>`:''}
             </div>`;
         });
         document.getElementById('rev-lista').innerHTML = h;
-        window.scrollTo(0,0);
     }
 </script>
 </body>
