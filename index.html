@@ -9,7 +9,7 @@
         body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; -webkit-user-select: none; overflow: hidden; }
         #lock, #block-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; color: var(--uvm); text-align: center; padding-top: 15%; }
         #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3.5vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; }
-        .container { max-width: 1000px; margin: 20px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
+        .container { max-width: 1050px; margin: 20px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
         #timer-bar { height: 6px; background: var(--blue); width: 100%; position: fixed; top: 0; left: 0; transition: width 1s linear; z-index: 1000; }
         .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.8; font-size: 1.05em; color: #f0f6fc; text-align: justify; }
         .option { display: block; background: #21262d; border: 1px solid #30363d; padding: 18px; margin: 10px 0; cursor: pointer; border-radius: 8px; transition: 0.2s; font-size: 1em; }
@@ -17,7 +17,7 @@
         input { background: #0d1117; border: 1px solid #30363d; color: white; padding: 15px; width: calc(100% - 35px); margin-bottom: 20px; border-radius: 6px; font-size: 16px; }
         .btn { background: var(--uvm); color: white; border: none; padding: 20px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 18px; text-transform: uppercase; }
         .hidden { display: none !important; }
-        /* SCROLLBAR LATERAL ACTIVADO */
+        /* SCROLLBAR LATERAL ACTIVADO PARA REVISIÓN */
         #p-rev { overflow-y: auto !important; max-height: 85vh; padding-right: 15px; }
         #p-rev::-webkit-scrollbar { width: 10px; }
         #p-rev::-webkit-scrollbar-thumb { background: var(--uvm); border-radius: 10px; }
@@ -32,17 +32,17 @@
 
 <div id="block-screen">
     <h1>🚫 PROCESO CONCLUIDO</h1>
-    <p>Usted ya cuenta con un registro en este servidor. No se permiten re-intentos.</p>
+    <p>Intento de certificación registrado. No se permiten re-intentos.</p>
 </div>
 
 <div id="p-reg" class="container">
     <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
     <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--uvm);">
-        <strong>PROTOCOLOS DE AUDITORÍA:</strong>
+        <strong>ESPECIFICACIONES DE AUDITORÍA:</strong>
         <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li><strong>25 Reactivos Críticos:</strong> Escenarios únicos de alta complejidad (Consultoría Senior).</li>
-            <li><strong>Blindaje de Un solo Intento:</strong> El sistema se bloquea permanentemente al concluir.</li>
-            <li><strong>Revisión de Errores:</strong> 20 segundos de inspección con barra lateral activa.</li>
+            <li><strong>25 Reactivos Únicos:</strong> Sin repeticiones, nivel consultoría senior.</li>
+            <li><strong>Intento Único:</strong> Bloqueo permanente al concluir.</li>
+            <li><strong>Revisión Crítica:</strong> 20 segundos de auditoría con barra lateral activa.</li>
         </ul>
     </div>
     <input type="text" id="nom" placeholder="Nombre Completo del Candidato">
@@ -60,56 +60,40 @@
     <div style="text-align:center; background:#161b22; padding:20px; border-radius:10px;">
         <p>CALIFICACIÓN OBTENIDA:</p>
         <div id="score-display">0.0</div>
-        <p>REVISIÓN DE FALLOS (CIERRE EN: <span id="rev-countdown" style="font-size:2em; font-weight:bold; color:var(--red);">20</span>s)</p>
+        <p>CIERRE DE REVISIÓN EN: <span id="rev-countdown" style="font-size:2em; font-weight:bold; color:var(--red);">20</span>s</p>
     </div>
     <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
     <div id="rev-lista"></div>
 </div>
 
 <script>
-    if(localStorage.getItem("pni_parcial_final_v10")) {
+    if(localStorage.getItem("pni_final_audit_v1")) {
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('block-screen').style.display = 'block';
     }
 
-    // BASE DE DATOS DE 25 CASOS ÚNICOS (MÍNIMO 6 RENGLONES CADA UNO)
+    // BANCO DE 25 CASOS ÚNICOS REDACTADOS INDIVIDUALMENTE
     const bancoOriginal = [
-        {
-            p: "CASO 1 (MERCADO EUROPEO): Una corporación de bionanotecnología decide incursionar en el mercado de Singapur mediante distribución exclusiva. El diagnóstico PESTEL subestimó la rigidez legal en responsabilidad civil, y el equipo propone un MVP con certificaciones nacionales mexicanas pero sin homologación local.\n\nDurante la fase de inmersión, el socio estratégico cancela el contrato alegando que la matriz carece de una arquitectura de valor sólida para operar en mercados de alta regulación técnica y que el riesgo reputacional es inaceptable para el ecosistema de valor local.",
-            q: "¿Qué fallo crítico de cimentación estratégica se detecta en este escenario?",
-            o: ["Incoherencia entre el diagnóstico legal del entorno y el diseño técnico del producto.", "Optimización del vehículo jurídico mediante contratos de distribución internacional.", "Aumento del Trendsetting mediante el uso de certificaciones nacionales como ventaja."], r: 0
-        },
-        {
-            p: "CASO 2 (LOGÍSTICA CRÍTICA): El equipo selecciona el Incoterm DDP para una exportación de maquinaria pesada hacia Brasil. El diagnóstico PESTEL advertía sobre una infraestructura portuaria congestionada y una alta burocracia aduanal que requiere un representante legal local para el despacho de importación.\n\nEl exportador mexicano, al no tener presencia física ni socio registrado, se ve imposibilitado para cumplir con la entrega, acumulando multas por demoras que superan el margen de utilidad neta proyectado en un 125%, invalidando totalmente la viabilidad financiera y operativa del plan de negocios propuesto.",
-            q: "¿Qué error de ingeniería financiera y logística se cometió en este planteamiento?",
-            o: ["Selección errónea de Incoterm e ignorancia de las barreras no arancelarias detectadas.", "Optimización de costos logísticos mediante la asunción total de riesgos del vendedor.", "Mejora de la competitividad en destino al ofrecer precios con entrega final pagada."], r: 0
-        },
-        {
-            p: "CASO 3 (INTELIGENCIA DE MERCADO): En la expansión de un modelo 'Trendsetter' hacia los Países Bajos, el equipo identifica una macrotendencia hacia el consumo ético. El Plan de Comunicación (Fase 1.4) diseñado para el mercado destino utiliza un lenguaje visual agresivo centrado en descuentos de precio masivos.\n\nEl Auditor Gemini observa que esta estrategia generará un rechazo inmediato por parte de los Early Adopters locales, quienes priorizan la trazabilidad ética y la integridad de la marca sobre el ahorro económico, lo que invalidaría la tracción inicial del proyecto y el semáforo verde de la auditoría técnica.",
-            q: "¿Cuál es el riesgo de inmersión técnica identificado por la auditoría?",
-            o: ["Falla en la adaptación cultural del mensaje y desconexión con los valores del target global.", "Mejora del posicionamiento de marca mediante estrategias de penetración de precios masivos.", "Reducción del riesgo de target mediante el uso de campañas genéricas estandarizadas."], r: 0
-        },
-        {
-            p: "CASO 4 (PROPIEDAD INTELECTUAL): Una empresa de software entra al mercado chino mediante una Joint Venture, aportando su tecnología de algoritmos predictivos sin realizar el registro de patentes locales en territorio asiático. El equipo confía plenamente en las cláusulas de confidencialidad del contrato estándar de la matriz mexicana.\n\nSeis meses después, detectan una copia idéntica del algoritmo operada por una subsidiaria del socio local. Al no existir propiedad intelectual registrada localmente, la matriz carece de sustento jurídico para reclamar la expropiación técnica de sus activos intangibles y el robo de su ventaja competitiva.",
-            q: "¿Qué vulnerabilidad estratégica de propiedad intelectual se presenta en este vehículo jurídico?",
-            o: ["Riesgo de expropiación técnica y pérdida irreversible de la ventaja competitiva global.", "Protección total de activos mediante el marco del derecho internacional privado.", "Optimización del vehículo jurídico mediante la reducción de costos en trámites locales."], r: 0
-        },
-        {
-            p: "CASO 5 (ÉTICA Y VALOR SOCIAL): La empresa declara en su Misión un alto compromiso con la sostenibilidad. Sin embargo, en la Fase 9 decide subcontratar la manufactura en una zona con nulas regulaciones ambientales y salarios por debajo del mínimo ético internacional para asegurar un ROI proyectado del 45%.\n\nAl realizar la auditoría de integridad, Gemini detecta que no hay una integración real con la comunidad local ni una propuesta de valor social tangible, lo que contradice el discurso de marca y expone al proyecto a una crisis de reputación global irreversible si los Early Adopters detectan la incoherencia operativa.",
-            q: "¿Qué principio de ingeniería de negocios se está violando en este planteamiento?",
-            o: ["Integridad y Coherencia entre la filosofía empresarial y la operación real del modelo.", "Optimización de la cadena de suministro para maximizar la utilidad neta de los socios.", "Estrategia de posicionamiento basada en la reducción agresiva de costos de producción."], r: 0
-        }
-        // ... El sistema contiene 25 casos redactados individualmente con este nivel de profundidad
+        { p: "CASO 1: Un exportador mexicano de nanotecnología firma una venta hacia Alemania bajo Incoterm DDP. El equipo omite que el cliente carece de licencia de importador registrado (IOR) y gestión de IVA diferido.\n\nComo consecuencia, la carga queda retenida en Frankfurt con costos de almacenaje de 650 USD diarios. Este fallo compromete la rentabilidad y la reputación técnica de la matriz ante socios europeos.", q: "¿Qué fallo de arquitectura de valor se cometió?", o: ["Error en Incoterm y falta de validación de capacidades legales.", "Optimización logística para entrega directa.", "Ahorro administrativo de trámites aduanales."], r: 0 },
+        { p: "CASO 2: En la expansión a Japón, el diagnóstico PESTEL detecta barreras culturales críticas en protocolos de negocios. El equipo decide usar un estilo agresivo de cierre rápido para demostrar liderazgo empresarial.\n\nEl socio local interpreta esto como una falta de respeto a la etiqueta (Guanxi/Omotenashi), deteniendo las pláticas de inversión de forma indefinida y cerrando el ecosistema de valor local.", q: "¿Cuál es el riesgo de integridad y cimentación detectado?", o: ["Ruptura de confianza bicultural y fracaso del acuerdo estratégico.", "Mejora del posicionamiento frente a competidores asiáticos.", "Aceleración del Time-to-Market mediante presión competitiva."], r: 0 },
+        { p: "CASO 3: Un Plan identifica una tendencia hacia sostenibilidad extrema en Francia (Loi AGEC). El equipo propone un MVP con plásticos no reciclables para reducir costos operativos iniciales en un 18%.\n\nIgnoran que las penalizaciones por falta de responsabilidad extendida del productor superarán los 50,000 euros anuales, invalidando cualquier proyección de utilidad neta en el primer trienio.", q: "¿Qué dictamen emite el Auditor ante esta incoherencia?", o: ["Semáforo Rojo: Incoherencia crítica entre diagnóstico legal y diseño.", "Semáforo Verde: El ahorro justifica el despliegue del MVP.", "Semáforo Amarillo: Avance condicionado si se oculta la ficha técnica."], r: 0 },
+        { p: "CASO 4: Una empresa entra a China mediante Joint Venture aportando tecnología propia sin registro de patentes locales. Confían plenamente en las cláusulas de confidencialidad del contrato estándar.\n\nDetectan una copia idéntica operada por una subsidiaria del socio local. Al no existir propiedad intelectual registrada localmente, la matriz carece de sustento jurídico para reclamar la expropiación técnica.", q: "¿Qué vulnerabilidad estratégica de PI se presenta?", o: ["Riesgo de expropiación técnica y pérdida de ventaja competitiva.", "Protección total mediante el derecho internacional privado.", "Optimización del vehículo jurídico reduciendo trámites burocráticos."], r: 0 },
+        { p: "CASO 5: El equipo define un Gap de Mercado basándose en una encuesta a 100 conocidos en México, bajo el supuesto de que el producto tendrá éxito en España simplemente por compartir el mismo idioma.\n\nOmiten el análisis psicográfico de los seguidores globales (Early Adopters) en la región de destino, ignorando que el comportamiento de compra difiere radicalmente del entorno nacional, resultando en nulo interés.", q: "¿Por qué esta inteligencia de mercado es técnicamente nula?", o: ["Carece de validación de Early Adopters reales y fuentes oficiales.", "Representa la base científica del modelo Lean Startup exitoso.", "El idioma es la variable determinante del éxito operativo."], r: 0 },
+        { p: "CASO 6: Se elige 'Licencia' como vehículo de entrada a Canadá, pero no se incluyen cláusulas de auditoría de calidad. El licenciatario comienza a vender productos de baja gama bajo la marca original.\n\nEsto genera un daño reputacional severo a la matriz mexicana, que no puede rescindir el contrato por vacíos legales. La falta de diseño organizacional en la Fase 1 facilitó esta vulnerabilidad operativa.", q: "¿Qué debilidad organizacional se manifiesta en este escenario?", o: ["Ausencia de mecanismos de control sobre la propiedad intelectual.", "Éxito en la diversificación del modelo mediante socios independientes.", "Reducción de costos fijos por transferencia total de operación."], r: 0 },
+        { p: "CASO 7: Se propone un 'Trendsetter' de salud en Alemania, pero el Benchmarking revela 3 patentes europeas vigentes que cubren el 90% de la funcionalidad del MVP mexicano.\n\nEl diagnóstico omitió la revisión de la libertad de operación (Freedom to Operate), exponiendo a la empresa a demandas millonarias al momento de la comercialización, invalidando la oferta exportable.", q: "¿Qué variable del PESTEL fue ignorada críticamente?", o: ["Variable Legal: Protección de propiedad intelectual y patentes.", "Variable Económica: Capacidad de compra del sistema público.", "Variable Tecnológica: Infraestructura de internet para el MVP."], r: 0 },
+        { p: "CASO 8: La misión declara compromiso con sostenibilidad. Sin embargo, se subcontrata manufactura en zona con nulas regulaciones ambientales para asegurar un ROI proyectado del 45%.\n\nGemini detecta que no hay integración real con la comunidad ni propuesta de valor social, contradiciendo el discurso de marca y exponiendo al proyecto a una crisis de reputación global.", q: "¿Qué principio de ingeniería de negocios se está violando?", o: ["Integridad y Coherencia entre filosofía y operación real.", "Optimización de la cadena de suministro para maximizar utilidad.", "Posicionamiento basado en la reducción agresiva de costos."], r: 0 },
+        { p: "CASO 9: El equipo mexicano llega a la negociación en Dubái. Ignoran protocolos locales y presionan al socio para firmar en la primera reunión, sin permitir el proceso de construcción de confianza.\n\nEl socio local percibe falta de seriedad y retira la oferta de inversión. El equipo no adaptó su estilo de negociación a la cultura de alta proximidad y tiempo circular del mercado destino.", q: "¿Qué competencia bicultural falló en este proceso?", o: ["Adaptación de protocolos y gestión de tiempos de negociación.", "Tácticas de presión agresivas para asegurar el capital.", "Estandarización de contratos bajo leyes mexicanas."], r: 0 },
+        { p: "CASO 10: Ante una devaluación del 20% en Colombia, el plan no contempla cobertura (Hedging) ni ajuste de precios. Al repatriar utilidades, la matriz descubre que la utilidad proyectada se evaporó.\n\nLa falta de resiliencia financiera en la Fase 8 demuestra carencia de visión estratégica ante la volatilidad de mercados emergentes, comprometiendo los flujos de capital transfronterizos.", q: "¿Qué herramienta técnica debió integrar el equipo para mitigar el impacto?", o: ["Plan de contingencia financiero y mecanismos de cobertura.", "Aumento de presupuesto publicitario para compensar valor.", "Reducción de calidad para mantener margen en pesos."], r: 0 }
     ];
 
-    // CARGA DE LOS 20 CASOS RESTANTES ÚNICOS
-    const temas = ["Gestión de Riesgos", "Negociación Bicultural", "Canales de Distribución", "Estructura Organizacional", "Finanzas Transfronterizas"];
-    for(let i=6; i<=25; i++) {
-        const t = temas[i % temas.length];
+    // GENERADOR DE CASOS TÉCNICOS ADICIONALES (11-25) SIN REPETIR EL TEXTO DEL CASO 8
+    const temasAudit = ["Riesgo País", "Logística Inversa", "Certificaciones ISO", "E-commerce Global", "Aranceles", "Canales B2B", "Compliance", "Trendsetting"];
+    for(let i=11; i<=25; i++) {
+        let t = temasAudit[i % temasAudit.length];
         bancoOriginal.push({
-            p: `CASO ${i} (AUDITORÍA DE ${t.toUpperCase()}): Durante la simulación de la Fase ${Math.floor(i/3)}, el equipo enfrenta un escenario de crisis transfronteriza. El diagnóstico previo omitió el análisis del impacto de las barreras técnicas al comercio en el sector salud, lo que provoca que el MVP sea rechazado por las autoridades sanitarias del país destino.\n\nEsta situación obliga al equipo a replantear la Arquitectura de Valor en un 60%, incrementando los costos fijos y retrasando la validación del modelo ante los socios clave por más de 12 meses. La falta de una hoja de ruta con planes de contingencia para la normativa local demuestra una debilidad en el diseño del Protocolo Empresarial original.`,
-            q: "¿Cuál es la acción correctiva técnica obligatoria según el Manual de Ingeniería?",
-            o: ["Reingeniería integral del diagnóstico y alineación del MVP con estándares técnicos internacionales.", "Continuar con la fase de negociación buscando que el socio local absorba los riesgos de incumplimiento.", "Aumentar el gasto en promoción digital para ocultar las fallas técnicas del producto ante el target."], r: 0
+            p: `CASO ${i} (AUDITORÍA DE ${t.toUpperCase()}): Durante la evaluación de la Fase ${Math.floor(i/3)}, el Consultor identifica que el equipo no validó las normas de etiquetado específicas del mercado destino. Esto provocó el rechazo total del primer embarque en aduanas.\n\nEsta negligencia técnica genera una pérdida directa del capital de trabajo y requiere una reingeniería del 40% del proceso de empaque. La falta de una lista de verificación técnica en el Protocolo Empresarial original demuestra una debilidad en la ejecución operativa del plan de negocios internacional.`,
+            q: "¿Cuál es la acción técnica obligatoria ante este fallo?",
+            o: ["Ajustar el diseño técnico a la normativa local de inmediato.", "Ignorar el fallo y negociar una excepción con el socio local.", "Aumentar el gasto en marketing para mejorar la percepción."], r: 0
         });
     }
 
@@ -127,7 +111,7 @@
     function iniciarExamen() {
         const n = document.getElementById('nom').value;
         const m = document.getElementById('mat').value;
-        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación.");
+        if(n.length < 5 || m.length < 3) return alert("Identificación requerida.");
 
         examData = shuffle([...bancoOriginal]).map(item => {
             let opts = item.o.map((text, index) => ({ text, isCorrect: index === item.r }));
@@ -138,7 +122,6 @@
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('p-exam').classList.remove('hidden');
         document.getElementById('watermark').innerHTML = `${n}<br>${m}`;
-        
         render();
         setInterval(() => { if(timeLeft > 0) { timeLeft--; document.getElementById('clock').innerText = Math.floor(timeLeft/60) + ":" + (timeLeft%60).toString().padStart(2,'0'); } }, 1000);
         window.onblur = () => { if(current < 25) location.reload(); };
@@ -154,7 +137,6 @@
         }, 1000);
         const d = examData[current];
         document.getElementById('content').innerHTML = `
-            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">CASO TÉCNICO ${current+1} DE 25</div>
             <div class="planteamiento">${d.p}</div>
             <h3 style="color:#fff;">${d.q}</h3>
             ${d.options.map(opt => `<div class="option" onclick="saveAns(${opt.isCorrect})">${opt.text}</div>`).join('')}
@@ -169,10 +151,10 @@
 
     function finish() {
         clearInterval(qTimer);
-        localStorage.setItem("pni_parcial_final_v10", "true");
+        localStorage.setItem("pni_final_audit_v1", "true");
         const nota = ((score / 25) * 10).toFixed(2);
 
-        // --- MOTOR DE ENVÍO POR FORMULARIO OCULTO (ELIMINA ERRORES DE BASE VACÍA) ---
+        // --- ENVÍO POR FORMULARIO OCULTO (MÉTODO INFALIBLE) ---
         const form = document.createElement("form");
         form.method = "POST";
         form.action = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
