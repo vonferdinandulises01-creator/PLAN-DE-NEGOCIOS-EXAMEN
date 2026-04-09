@@ -7,19 +7,18 @@
     <style>
         :root { --uvm: #c41e3a; --bg: #0d1117; --card: #161b22; --blue: #58a6ff; --green: #238636; --red: #da3633; }
         body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; -webkit-user-select: none; overflow: hidden; }
-        #lock, #block-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; color: var(--uvm); text-align: center; padding-top: 20%; }
+        #lock, #block-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; color: var(--uvm); text-align: center; padding-top: 15%; }
         #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3.5vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; }
         .container { max-width: 1000px; margin: 25px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
         #timer-bar { height: 6px; background: var(--blue); width: 100%; position: fixed; top: 0; left: 0; transition: width 1s linear; z-index: 1000; }
-        #timer { background: var(--uvm); color: white; padding: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; border-radius: 4px; }
-        .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.7; font-size: 1.05em; color: #f0f6fc; text-align: justify; }
-        .option { display: block; background: #21262d; border: 1px solid #30363d; padding: 18px; margin: 10px 0; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.7; font-size: 1.1em; color: #f0f6fc; text-align: justify; }
+        .option { display: block; background: #21262d; border: 1px solid #30363d; padding: 18px; margin: 10px 0; cursor: pointer; border-radius: 8px; transition: 0.2s; font-size: 1em; }
         .option:hover { border-color: var(--blue); background: #2d333b; transform: translateX(10px); }
         input { background: #0d1117; border: 1px solid #30363d; color: white; padding: 15px; width: calc(100% - 35px); margin-bottom: 20px; border-radius: 6px; }
         .btn { background: var(--uvm); color: white; border: none; padding: 20px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 18px; text-transform: uppercase; }
         .hidden { display: none !important; }
         .rev-card { border: 1px solid var(--red); padding: 20px; margin-bottom: 20px; border-radius: 8px; background: #1a0a0a; }
-        #rev-countdown { font-size: 2em; color: var(--red); font-weight: bold; margin: 10px 0; }
+        #rev-countdown { font-size: 2.5em; color: var(--red); font-weight: bold; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -27,125 +26,133 @@
 <div id="timer-bar"></div>
 <div id="watermark"></div>
 
-<!-- Pantalla de Bloqueo por Re-intento -->
 <div id="block-screen">
     <h1>🚫 PROCESO CONCLUIDO</h1>
-    <p>Usted ya cuenta con un registro en la base de datos para este examen.<br>No se permiten múltiples intentos.</p>
+    <p>Se ha detectado un registro previo. No se permiten re-intentos.</p>
 </div>
 
 <div id="lock">
-    <h1>⚠️ PROTOCOLO DE SEGURIDAD</h1>
-    <p id="lock-msg">Salida de ventana detectada. Sistema reiniciado.</p>
+    <h1>⚠️ SEGURIDAD ACTIVADA</h1>
+    <p id="lock-msg">Sistema bloqueado por infracción de protocolos.</p>
 </div>
 
-<!-- Registro -->
 <div id="p-reg" class="container">
     <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
-    <p style="text-align:center;">Campus Texcoco | Ingeniería de Negocios | Prof. Villarreal</p>
     <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <strong>PROTOCOLOS DE BLINDAJE:</strong>
+        <strong>AUDITORÍA DE BLINDAJE:</strong>
         <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li>Intento único: Una vez enviado, el sistema se bloquea permanentemente.</li>
-            <li>Revisión efímera: Solo se mostrarán errores por 20 segundos sin dar la respuesta correcta.</li>
-            <li>80 segundos por reactivo. No use otras pestañas.</li>
+            <li><strong>Aleatorización Total:</strong> Preguntas y opciones cambian en cada sesión.[cite: 2]</li>
+            <li><strong>Intento Único:</strong> Bloqueo permanente tras envío o recarga.[cite: 2]</li>
+            <li><strong>Revisión Crítica:</strong> Solo se visualizan errores por 20 segundos.[cite: 2]</li>
         </ul>
     </div>
     <input type="text" id="nom" placeholder="Nombre Completo">
     <input type="text" id="mat" placeholder="Matrícula">
-    <button class="btn" onclick="iniciarExamen()">VALIDAR E INICIAR EXAMEN</button>
+    <button class="btn" onclick="iniciarExamen()">INICIAR EVALUACIÓN DE ALTA COMPLEJIDAD</button>
 </div>
 
-<!-- Examen -->
 <div id="p-exam" class="container hidden">
-    <div id="timer">TIEMPO GLOBAL: <span id="clock">60:00</span></div>
+    <div id="timer" style="background:var(--uvm); color:white; padding:10px; text-align:center; margin-bottom:15px; border-radius:5px; font-weight:bold;">TIEMPO RESTANTE: <span id="clock">60:00</span></div>
     <div id="content"></div>
 </div>
 
-<!-- Revisión -->
 <div id="p-rev" class="container hidden">
-    <h2 style="color:var(--red); text-align:center;">AUDITORÍA DE FALLOS DETECTADOS</h2>
+    <h2 style="color:var(--red); text-align:center;">INFORME DE FALLOS TÉCNICOS</h2>
     <div style="text-align:center; background:#161b22; padding:15px; border-radius:8px;">
-        <p>Esta ventana se cerrará permanentemente en:</p>
+        <p>REVISIÓN EXPIRA EN:</p>
         <div id="rev-countdown">20</div>
-        <p>Analice sus áreas de oportunidad. No se muestra la solución correcta.</p>
     </div>
-    <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
     <div id="rev-lista"></div>
 </div>
 
 <script>
-    // Verificar intento previo al cargar la página
-    window.onload = () => {
-        if(localStorage.getItem("pni_examen_concluido")) {
-            document.getElementById('p-reg').classList.add('hidden');
-            document.getElementById('block-screen').style.display = 'block';
-        }
-    };
+    if(localStorage.getItem("pni_v2_done")) {
+        document.getElementById('p-reg').classList.add('hidden');
+        document.getElementById('block-screen').style.display = 'block';
+    }
 
-    const db = [
+    // BASE DE DATOS DE CASOS COMPLEJOS (SINTETIZADA)
+    const bancoPreguntas = [
         {
-            p: "ESTUDIO DE CASO (CIMENTACIÓN ESTRATÉGICA): Un equipo emprendedor busca internacionalizar un modelo 'Trendsetter' en servicios de logística inversa en la Unión Europea. Durante el diagnóstico PESTEL se detectan normativas de economía circular sumamente restrictivas; sin embargo, el equipo mantiene un MVP estandarizado sin adaptaciones técnicas locales.",
-            q: "¿Qué riesgo de auditoría académica se presenta en esta fase de cimentación?",
-            o: ["Riesgo de Incoherencia Estratégica: El MVP es técnicamente incapaz de responder a las variables legales del diagnóstico.", "Riesgo de Tracción de Target: Los Early Adopters carecen de incentivos fiscales para validar el modelo.", "Riesgo de Gap de Mercado: El problema identificado no es real para el contexto europeo."],
-            r: 0
+            p: "CASO DE CIMENTACIÓN ESTRATÉGICA: Un equipo emprendedor busca internacionalizar un modelo 'Trendsetter' de servicios digitales en Europa. El PESTEL detecta normativas ecológicas severas (Green Deal), pero el equipo mantiene un MVP estandarizado sin adaptaciones técnicas locales. Al auditar la coherencia entre el diagnóstico y el protocolo empresarial...",
+            q: "¿Cuál es el riesgo crítico detectado en la Fase de Diseño?",
+            o: ["Riesgo de Incoherencia: El MVP no responde a las variables legales del diagnóstico.", "Riesgo de Target: Los Early Adopters carecen de incentivos fiscales.", "Riesgo de Gap: El problema identificado no es real para el contexto europeo."],
+            correcta: 0
         },
         {
-            p: "AUDITORÍA DE INTELIGENCIA (PHASE 0): El equipo sustenta su propuesta de valor basándose exclusivamente en una 'corazonada' de mercado y datos extraídos de redes sociales no profesionales, omitiendo reportes de cámaras de comercio o inteligencia de mercados oficiales.",
-            q: "¿Cuál es la consecuencia técnica según el protocolo de Bloqueo Secuencial Nivel 5?",
-            o: ["El sistema otorga Semáforo Rojo y bloquea el avance debido a la falta de sustento en macrotendencias oficiales.", "El sistema permite avanzar si el equipo demuestra que la idea es altamente creativa a pesar de la falta de datos.", "Se otorga Semáforo Verde condicionado a que en la Fase de Inmersión se consigan los datos reales."],
-            r: 0
+            p: "AUDITORÍA DE INTELIGENCIA DE MERCADO (PHASE 0): El equipo sustenta su propuesta basándose exclusivamente en una 'corazonada' y datos de redes sociales no profesionales, omitiendo reportes de cámaras de comercio o inteligencia de mercados oficiales. Según el protocolo de Bloqueo Secuencial Nivel 5...",
+            q: "¿Qué dictamen emite el Auditor Gemini?",
+            o: ["Semáforo Rojo: Bloqueo por falta de sustento en macrotendencias oficiales.", "Semáforo Amarillo: Avance condicionado a validación en fase de Inmersión.", "Semáforo Verde: El modelo es válido por su alta creatividad disruptiva."],
+            correcta: 0
         },
         {
-            p: "ESTRUCTURA Y CONTROL (DISEÑO ORGANIZAL): Ante una expansión a Tokio, el equipo opta por una descentralización total para ganar agilidad. No obstante, el Consultor Senior observa que no existen KPIs de control ni alineación de cultura organizacional con la matriz mexicana.",
-            q: "¿Cuál es el impacto crítico de este diseño en la internacionalización?",
-            o: ["Pérdida de la integridad del modelo de negocio y alta probabilidad de desviación operativa de la visión original.", "Mejora sustancial en el ROI debido a que Tokio opera sin burocracia desde el primer día.", "Aumento innecesario del riesgo de target debido a que el personal local no conoce México."],
-            r: 0
+            p: "DISEÑO ORGANIZACIONAL GLOBAL: Ante una expansión a Tokio, el equipo opta por una descentralización total para ganar agilidad local. Sin embargo, se observa una omisión total de KPIs de control y de alineación de cultura organizacional con la matriz mexicana.",
+            q: "¿Cuál es la vulnerabilidad estratégica de este diseño?",
+            o: ["Pérdida de la integridad del modelo de negocio y desviación operativa de la visión original.", "Mejora del ROI debido a la eliminación de burocracia centralizada.", "Aumento del riesgo de target por falta de perfiles biculturales."],
+            correcta: 0
+        },
+        {
+            p: "VALIDACIÓN DE EARLY ADOPTERS: Para mitigar el 'Riesgo de Target', el equipo define su perfil de seguidor global. El diagnóstico indica que el Gap de Mercado es un problema de nicho, pero el plan de comunicación se dirige a un público masivo genérico.",
+            q: "¿Qué inconsistencia técnica invalida la tracción inicial?",
+            o: ["Error de Segmentación: El target demasiado amplio imposibilita validar el MVP.", "Eficiencia Logística: Los canales seleccionados superan la capacidad operativa.", "Riesgo de Ejecución: El organigrama no contempla perfiles de atención masiva."],
+            correcta: 0
+        },
+        {
+            p: "Riesgo de Relevancia y Gap: Durante la auditoría, el Consultor Senior evalúa si el vacío detectado en el mercado extranjero justifica una inversión masiva. El equipo presenta datos PESTEL sólidos pero no logra demostrar que la solución propuesta es técnica y financieramente lógica.",
+            q: "¿Qué fase del protocolo empresarial está comprometida?",
+            o: ["La validación del Gap para confirmar demanda insatisfecha real.", "El análisis de Benchmarking frente a la competencia directa.", "La redacción de la filosofía empresarial (Misión y Visión)."],
+            correcta: 0
         }
     ];
 
-    // Autogenerar hasta 25 con redacción robusta
-    while(db.length < 25) {
-        let base = db[db.length % 3];
-        db.push({
-            p: `ESCENARIO DE CRISIS (${db.length + 1}): Durante la auditoría de la Fase ${Math.floor(db.length/3)}, se detecta que la 'Oferta Exportable' no cumple con el etiquetado reglamentario del país destino. El equipo insiste en pasar a la fase de Negociación Internacional para asegurar el capital de los socios.`,
-            q: "¿Cuál es la postura correcta del Auditor de Ingeniería de Negocios?",
-            o: ["Anular el reactivo de inmersión por incumplimiento normativo y exigir reingeniería de producto.", "Permitir la negociación para validar si el socio local puede absorber el costo del etiquetado.", "Aprobar la fase siempre que el MVP tenga un margen de utilidad superior al 40%."],
-            r: 0
-        });
-    }
+    let exam = [], userAnswers = [], current = 0, score = 0, timeLeft = 3600;
+    let qTimer, qTime = 80;
 
-    let user = {}, exam = [], userAnswers = [], current = 0, score = 0, timeLeft = 3600, qTime = 80;
-    let qTimer, gTimer;
+    // Función de aleatorización real
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
     function iniciarExamen() {
         const n = document.getElementById('nom').value;
         const m = document.getElementById('mat').value;
-        if(n.length < 5 || m.length < 3) return alert("Datos inválidos.");
-        
-        user = { n, m, sid: Math.random().toString(36).substr(2,9).toUpperCase() };
-        document.getElementById('watermark').innerHTML = `${user.n}<br>${user.m}`;
-        
-        exam = db.sort(() => Math.random() - 0.5); 
+        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación.");
+
+        // Aleatorizar preguntas y opciones
+        exam = shuffleArray([...bancoPreguntas]).map(q => {
+            const originalOptions = q.o.map((text, index) => ({ text, isCorrect: index === q.correcta }));
+            const shuffledOptions = shuffleArray([...originalOptions]);
+            return {
+                p: q.p,
+                q: q.q,
+                options: shuffledOptions
+            };
+        });
+
+        document.getElementById('watermark').innerHTML = `${n}<br>${m}`;
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('p-exam').classList.remove('hidden');
         
-        document.onkeydown = (e) => { if(e.ctrlKey || e.metaKey || e.key === "PrintScreen") return false; };
         render();
-        gTimer = setInterval(updateGlobal, 1000);
-        window.onblur = () => { if(current < 25) location.reload(); };
-    }
+        setInterval(() => {
+            if(timeLeft > 0) {
+                timeLeft--;
+                document.getElementById('clock').innerText = `${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}`;
+            } else { finish(); }
+        }, 1000);
 
-    function updateGlobal() {
-        if(timeLeft > 0) {
-            timeLeft--;
-            document.getElementById('clock').innerText = `${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}`;
-        } else { finish(); }
+        window.onblur = () => { if(current < exam.length) location.reload(); };
     }
 
     function render() {
-        if(current >= 25) return finish();
+        if(current >= exam.length) return finish();
         clearInterval(qTimer);
         qTime = 80;
+        
         qTimer = setInterval(() => {
             qTime--;
             document.getElementById('timer-bar').style.width = (qTime/80)*100 + "%";
@@ -154,74 +161,56 @@
 
         const d = exam[current];
         document.getElementById('content').innerHTML = `
-            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">REPORTE DE AUDITORÍA ${current+1} DE 25</div>
+            <div style="color:var(--blue); font-weight:bold; margin-bottom:10px;">CASO ${current+1} DE ${exam.length}</div>
             <div class="planteamiento">${d.p}</div>
             <h3 style="color:#fff; margin-bottom:20px;">${d.q}</h3>
-            ${d.o.map((o, i) => `<div class="option" onclick="saveAns(${i})">${o}</div>`).join('')}
+            ${d.options.map((opt, i) => `<div class="option" onclick="saveAns(${opt.isCorrect})">${opt.text}</div>`).join('')}
         `;
     }
 
-    function saveAns(idx) {
-        userAnswers.push(idx);
-        if(idx === exam[current].r) score++;
+    function saveAns(isCorrect) {
+        userAnswers.push(isCorrect);
+        if(isCorrect) score++;
         current++;
         render();
     }
 
     function finish() {
-        clearInterval(qTimer); clearInterval(gTimer);
-        document.getElementById('timer-bar').style.display = 'none';
-        const nota = ((score / 25) * 10).toFixed(2);
-        
-        // Registrar en LocalStorage para bloquear re-intentos
-        localStorage.setItem("pni_examen_concluido", "true");
+        clearInterval(qTimer);
+        localStorage.setItem("pni_v2_done", "true");
+        const nota = ((score / exam.length) * 10).toFixed(2);
 
-        // Enviar a Google Forms
+        // Envío a Google Forms
         const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
         const p = new URLSearchParams();
-        p.append("entry.2005620554", user.n);
-        p.append("entry.1045792443", user.m);
+        p.append("entry.2005620554", document.getElementById('nom').value);
+        p.append("entry.1045792443", document.getElementById('mat').value);
         p.append("entry.1065046570", nota);
-        p.append("entry.1166974658", `Folio: ${user.sid}. Aciertos: ${score}/25`);
-
+        p.append("entry.1166974658", `Aciertos: ${score}/${exam.length}`);
         fetch(formURL, { method: "POST", mode: "no-cors", body: p });
 
-        mostrarRevisionEfimera();
+        showReview();
     }
 
-    function mostrarRevisionEfimera() {
+    function showReview() {
         document.getElementById('p-exam').classList.add('hidden');
         document.getElementById('p-rev').classList.remove('hidden');
         
         let h = "";
-        let erroresEncontrados = 0;
-
         exam.forEach((p, i) => {
-            if(userAnswers[i] !== p.r) {
-                erroresEncontrados++;
-                h += `<div class="rev-card">
-                    <strong style="color:var(--red)">ERROR EN CASO ${i+1}:</strong><br>
-                    <p style="font-size:0.9em;">${p.p}</p>
-                    <p><em>Su respuesta fue incorrecta. Repase la fundamentación técnica.</em></p>
-                </div>`;
+            if(!userAnswers[i]) {
+                h += `<div class="rev-card"><strong>FALLO EN CASO ${i+1}:</strong><br><p style="font-size:0.9em;">${p.p}</p></div>`;
             }
         });
+        document.getElementById('rev-lista').innerHTML = h || "<h3 style='color:var(--green)'>EXAMEN PERFECTO</h3>";
 
-        if(erroresEncontrados === 0) {
-            h = "<h3 style='text-align:center; color:var(--green)'>EXAMEN PERFECTO. NO SE DETECTARON ERRORES.</h3>";
-        }
-
-        document.getElementById('rev-lista').innerHTML = h;
-
-        // Temporizador de 20 segundos para la revisión
         let revTime = 20;
         const revInt = setInterval(() => {
             revTime--;
             document.getElementById('rev-countdown').innerText = revTime;
             if(revTime <= 0) {
                 clearInterval(revInt);
-                document.getElementById('p-rev').innerHTML = "<h1>PROCESO CONCLUIDO</h1><p>La revisión ha expirado. El sistema se ha cerrado.</p>";
-                setTimeout(() => { location.reload(); }, 2000);
+                location.reload();
             }
         }, 1000);
     }
