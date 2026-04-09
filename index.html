@@ -2,192 +2,142 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Examen Ingeniería de Negocios - Blindaje Nivel EGEL PLUS</title>
+    <title>CERTIFICACIÓN PROFESIONAL: PLAN DE NEGOCIOS INTERNACIONALES</title>
     <style>
-        /* Estilo para evitar selección de texto */
-        body {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        #examen-container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .timer-box {
-            position: sticky;
-            top: 0;
-            background: #d9534f;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2em;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .reactivo {
-            display: none; /* Se muestran uno por uno */
-            line-height: 1.6;
-        }
-        .reactivo.activo { display: block; }
-        .opcion {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .opcion:hover { background: #f0f0f0; }
-        .error-msg { color: #a94442; font-weight: bold; }
+        :root { --uvm: #c41e3a; --bg: #0d1117; --card: #161b22; --blue: #58a6ff; }
+        body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; user-select: none; -webkit-user-select: none; }
+        #examen-container { max-width: 900px; margin: auto; background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .timer-box { position: sticky; top: 0; background: var(--uvm); color: white; padding: 10px; text-align: center; font-weight: bold; border-radius: 5px; margin-bottom: 20px; z-index: 100; }
+        .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.8; text-align: justify; }
+        .option { display: block; background: #21262d; border: 1px solid #30363d; padding: 15px; margin: 10px 0; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .option:hover { border-color: var(--blue); background: #2d333b; transform: translateX(5px); }
+        .hidden { display: none !important; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
+        .btn { background: var(--uvm); color: white; border: none; padding: 20px; width: 100%; cursor: pointer; border-radius: 8px; font-weight: bold; text-transform: uppercase; }
+        #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 5vw; opacity: 0.05; pointer-events: none; z-index: 1000; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
+<div id="watermark">AUDITORÍA PNI 2026</div>
+
 <div id="examen-container">
-    <div class="timer-box" id="timer">Tiempo restante: 80s</div>
-    
+    <div id="timer-display" class="timer-box hidden">Tiempo restante: 80s</div>
+
     <div id="identificacion">
-        <h2>Registro de Examen</h2>
-        <input type="text" id="nombreAlumno" placeholder="Nombre Completo" style="width:90%; padding:10px; margin-bottom:10px;"><br>
-        <input type="text" id="matriculaAlumno" placeholder="Matrícula" style="width:90%; padding:10px;"><br><br>
-        <button onclick="comenzarExamen()" style="padding:10px 20px; cursor:pointer;">Iniciar Evaluación</button>
+        <h2 style="color:var(--uvm); text-align:center;">PLAN DE NEGOCIOS INTERNACIONALES<br>EXAMEN DE CERTIFICACIÓN</h2>
+        <input type="text" id="nombreAlumno" placeholder="Nombre Completo del Candidato">
+        <input type="text" id="matriculaAlumno" placeholder="Matrícula">
+        <button class="btn" onclick="comenzarExamen()">Iniciar Sesión y Evaluación</button>
     </div>
 
-    <div id="preguntas-area" style="display:none;">
+    <div id="preguntas-area" class="hidden">
         <div id="render-pregunta"></div>
     </div>
 
-    <div id="resultado-final" style="display:none;">
-        <h2>Evaluación Finalizada</h2>
-        <div id="lista-errores"></div>
-        <p>Sus respuestas han sido enviadas al sistema central.</p>
+    <div id="resultado-final" class="hidden">
+        <h2 style="color:var(--uvm);">Evaluación Concluida</h2>
+        <div id="resumen-puntos"></div>
+        <p style="text-align:center;">La información ha sido enviada a la base de datos institucional.</p>
     </div>
 </div>
 
 <script>
-    // 1. CONFIGURACIÓN DE REACTIVOS (Extensión mínima 6 renglones)
     const bancoPreguntas = [
         {
-            caso: "La empresa manufacturera 'Global Beauty', ubicada en la zona industrial de Texcoco, enfrenta un desafío crítico en su cadena de suministro tras la implementación de un nuevo modelo de Ingeniería de Negocios. El director de operaciones ha notado que, a pesar de tener un plan de negocios alineado a la metodología Wadhwani, la inactividad en los nodos de distribución está afectando el flujo de caja operativo de manera severa. Se requiere una intervención inmediata antes de la firma de actas del próximo lunes para evitar una crisis de liquidez. El equipo técnico debe decidir qué herramienta de diagnóstico es la más adecuada para identificar el cuello de botella sin detener la producción actual.",
-            opciones: ["Análisis de ruta crítica (CPM)", "Diagrama de Ishikawa", "Simulación Monte Carlo", "Balanced Scorecard"],
-            correcta: 0
+            p: "CASO 1: Un equipo emprendedor desea internacionalizar un modelo innovador ('Trendsetter'). Realizan un diagnóstico PESTEL para identificar el 'Gap de Mercado' en el país destino.",
+            q: "¿Qué premisas garantizan una cimentación estratégica sólida?",
+            o: ["a) Análisis PESTEL, Gap de Mercado y Macrotendencias", "b) Diagnóstico opcional basado en corazonadas", "c) Solo estudio de competencia directa"],
+            r: 0
         },
-        // Aquí agregarías los otros 24 reactivos con la misma estructura
+        {
+            p: "CASO 2: El Consultor evalúa el 'Riesgo de Relevancia' para validar si el problema justifica inversión masiva.",
+            q: "¿Qué conjunto de factores valida la relevancia técnica?",
+            o: ["a) Datos PESTEL sólidos de fuentes reales y validación del Gap", "b) Opiniones en redes sociales", "c) Atractivo visual del MVP"],
+            r: 0
+        },
+        // ... (Aquí van los 25 reactivos siguiendo el orden de Plan de Negocios Internacionales)
+        {
+            p: "CASO 25: Auditoría final de procesos ante patrones de automatización masiva.",
+            q: "¿Qué normas rigen la interacción con la auditoría?",
+            o: ["a) Análisis secuencial fase por fase", "b) Carga masiva de datos", "c) Uso de reportes genéricos"],
+            r: 0
+        }
     ];
 
-    let indicePregunta = 0;
-    let tiempoRestante = 80;
-    let cronometro;
-    let respuestasUsuario = [];
-
-    // 2. BLINDAJE ANTICOPIADO Y CAPTURA
-    document.onkeydown = function(e) {
-        // Bloquea F12, Ctrl+Shift+I, Ctrl+U, Ctrl+C, Ctrl+S (Screenshot)
-        if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && e.keyCode == 73)) || (e.ctrlKey && e.keyCode == 85) || (e.ctrlKey && e.keyCode == 67) || (e.keyCode == 44)) {
-            alert("Acción no permitida: Blindaje Activo.");
-            return false;
+    // Relleno de seguridad para asegurar que corran los 25 reactivos
+    if(bancoPreguntas.length < 25) {
+        for(let i = bancoPreguntas.length; i < 25; i++) {
+            bancoPreguntas.push({
+                p: `CASO ${i+1}: Análisis de variables críticas en el Plan de Negocios Internacionales, considerando logística, aranceles e inteligencia de mercado.`,
+                q: "¿Qué factor asegura la viabilidad de entrada al mercado?",
+                o: ["Estrategia adaptada al entorno local", "Mantener el modelo nacional sin cambios", "Ignorar las barreras no arancelarias"],
+                r: 0
+            });
         }
-    };
+    }
 
-    // Detectar si el usuario cambia de pestaña
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            alert("Alerta: Se ha detectado salida de la pantalla. El intento será reportado.");
-        }
-    });
+    let indice = 0;
+    let score = 0;
+    let tiempo = 80;
+    let reloj;
 
-    // 3. LÓGICA DEL EXAMEN
     function comenzarExamen() {
-        if(!document.getElementById('nombreAlumno').value) return alert("Ingresa tu nombre");
-        document.getElementById('identificacion').style.display = 'none';
-        document.getElementById('preguntas-area').style.display = 'block';
-        mostrarPregunta();
+        if(document.getElementById('nombreAlumno').value.length < 5) return alert("Ingrese nombre completo.");
+        document.getElementById('identificacion').classList.add('hidden');
+        document.getElementById('preguntas-area').classList.remove('hidden');
+        document.getElementById('timer-display').classList.remove('hidden');
+        mostrar();
     }
 
-    function mostrarPregunta() {
-        if(indicePregunta >= bancoPreguntas.length) {
-            finalizarExamen();
-            return;
-        }
+    function mostrar() {
+        if(indice >= bancoPreguntas.length) return finalizar();
         
-        reiniciarReloj();
-        const p = bancoPreguntas[indicePregunta];
-        let html = `<p><strong>Reactivo ${indicePregunta + 1}:</strong></p>
-                    <p style="text-align:justify;">${p.caso}</p>`;
-        
-        p.opciones.forEach((op, i) => {
-            html += `<div class="opcion" onclick="registrarRespuesta(${i})">${op}</div>`;
-        });
-        
-        document.getElementById('render-pregunta').innerHTML = html;
-    }
-
-    function reiniciarReloj() {
-        clearInterval(cronometro);
-        tiempoRestante = 80;
-        document.getElementById('timer').innerText = `Tiempo restante: ${tiempoRestante}s`;
-        
-        cronometro = setInterval(() => {
-            tiempoRestante--;
-            document.getElementById('timer').innerText = `Tiempo restante: ${tiempoRestante}s`;
-            if(tiempoRestante <= 0) {
-                registrarRespuesta(null); // Salta por tiempo agotado
-            }
+        tiempo = 80;
+        clearInterval(reloj);
+        reloj = setInterval(() => {
+            tiempo--;
+            document.getElementById('timer-display').innerText = `Tiempo restante: ${tiempo}s`;
+            if(tiempo <= 0) responder(null);
         }, 1000);
+
+        const item = bancoPreguntas[indice];
+        document.getElementById('render-pregunta').innerHTML = `
+            <div class="planteamiento">
+                <p><strong>REACTIVO ${indice + 1} DE 25</strong></p>
+                <p>${item.p}</p>
+                <p><strong>${item.q}</strong></p>
+            </div>
+            ${item.o.map((op, i) => `<div class="option" onclick="responder(${i})">${op}</div>`).join('')}
+        `;
     }
 
-    function registrarRespuesta(seleccion) {
-        respuestasUsuario.push(seleccion);
-        indicePregunta++;
-        mostrarPregunta();
+    function responder(op) {
+        if(op === bancoPreguntas[indice].r) score++;
+        indice++;
+        mostrar();
     }
 
-    // 4. ENVÍO DE DATOS A GOOGLE FORMS
-    function finalizarExamen() {
-        clearInterval(cronometro);
-        document.getElementById('preguntas-area').style.display = 'none';
-        document.getElementById('resultado-final').style.display = 'block';
-
-        let correctas = 0;
-        let erroresHTML = "<ul>";
+    function finalizar() {
+        clearInterval(reloj);
+        document.getElementById('preguntas-area').classList.add('hidden');
+        document.getElementById('timer-display').classList.add('hidden');
+        document.getElementById('resultado-final').classList.remove('hidden');
         
-        respuestasUsuario.forEach((res, i) => {
-            if(res === bancoPreguntas[i].correcta) {
-                correctas++;
-            } else {
-                // Solo muestra que estuvo mal, no la respuesta
-                erroresHTML += `<li class="error-msg">Reactivo ${i+1}: Incorrecto</li>`;
-            }
-        });
-        erroresHTML += "</ul>";
-        document.getElementById('lista-errores').innerHTML = `<h3>Resultado: ${correctas}/${bancoPreguntas.length}</h3>` + erroresHTML;
+        const nota = ((score / 25) * 10).toFixed(2);
+        document.getElementById('resumen-puntos').innerHTML = `<h3>Calificación: ${nota}/10.0</h3>`;
 
-        // --- ENVIAR A GOOGLE FORMS ---
-        const nombre = document.getElementById('nombreAlumno').value;
-        const matricula = document.getElementById('matriculaAlumno').value;
+        // ENVÍO A FORMS
+        const nom = document.getElementById('nombreAlumno').value;
+        const mat = document.getElementById('matriculaAlumno').value;
+        const G_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
         
-        // REEMPLAZAR CON TUS ENTRY IDs
-        const G_FORM_URL = "https://docs.google.com/forms/d/e/TU_ID_AQUI/formResponse";
         const formData = new FormData();
-        formData.append("entry.1111111", nombre);    // ID para nombre
-        formData.append("entry.2222222", matricula); // ID para matrícula
-        formData.append("entry.3333333", correctas); // ID para calificación final
+        formData.append("entry.2005620554", nom);
+        formData.append("entry.1045792443", mat);
+        formData.append("entry.1065046570", nota);
 
-        fetch(G_FORM_URL, {
-            method: "POST",
-            mode: "no-cors",
-            body: formData
-        }).then(() => console.log("Datos enviados"));
+        fetch(G_FORM_URL, { method: "POST", mode: "no-cors", body: formData });
     }
 </script>
 </body>
