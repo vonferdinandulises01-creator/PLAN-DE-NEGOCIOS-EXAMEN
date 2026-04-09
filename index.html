@@ -1,201 +1,125 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CERTIFICACIÓN PROFESIONAL: PLAN DE NEGOCIOS INTERNACIONALES</title>
-    <style>
-        :root { --uvm: #c41e3a; --bg: #0d1117; --card: #161b22; --blue: #58a6ff; --green: #238636; --red: #da3633; }
-        body { background: var(--bg); color: #c9d1d9; font-family: 'Segoe UI', sans-serif; margin: 0; user-select: none; -webkit-user-select: none; overflow: hidden; }
-        #lock, #block-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; color: var(--uvm); text-align: center; padding-top: 15%; }
-        #watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 3.5vw; opacity: 0.08; color: white; pointer-events: none; z-index: 5000; white-space: nowrap; text-align: center; }
-        .container { max-width: 1050px; margin: 20px auto; padding: 30px; background: var(--card); border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 10; }
-        #timer-bar { height: 6px; background: var(--blue); width: 100%; position: fixed; top: 0; left: 0; transition: width 1s linear; z-index: 1000; }
-        .planteamiento { background: #0d1117; padding: 25px; border-left: 5px solid var(--uvm); margin-bottom: 20px; line-height: 1.8; font-size: 1.05em; color: #f0f6fc; text-align: justify; }
-        .option { display: block; background: #21262d; border: 1px solid #30363d; padding: 18px; margin: 10px 0; cursor: pointer; border-radius: 8px; transition: 0.2s; font-size: 1em; }
-        .option:hover { border-color: var(--blue); background: #2d333b; transform: translateX(10px); }
-        input { background: #0d1117; border: 1px solid #30363d; color: white; padding: 15px; width: calc(100% - 35px); margin-bottom: 20px; border-radius: 6px; font-size: 16px; }
-        .btn { background: var(--uvm); color: white; border: none; padding: 20px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 18px; text-transform: uppercase; }
-        .hidden { display: none !important; }
-        /* SCROLLBAR LATERAL ACTIVADO PARA REVISIÓN */
-        #p-rev { overflow-y: auto !important; max-height: 85vh; padding-right: 15px; }
-        #p-rev::-webkit-scrollbar { width: 10px; }
-        #p-rev::-webkit-scrollbar-thumb { background: var(--uvm); border-radius: 10px; }
-        .rev-card { border: 1px solid var(--red); padding: 20px; margin-bottom: 20px; border-radius: 8px; background: #1a0a0a; border-left: 6px solid var(--red); }
-        #score-display { font-size: 5em; color: var(--uvm); font-weight: bold; margin: 10px 0; }
-    </style>
-</head>
-<body oncontextmenu="return false;">
-
-<div id="timer-bar"></div>
-<div id="watermark"></div>
-
-<div id="block-screen">
-    <h1>🚫 PROCESO CONCLUIDO</h1>
-    <p>Intento de certificación registrado. No se permiten re-intentos.</p>
-</div>
-
-<div id="p-reg" class="container">
-    <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
-    <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--uvm);">
-        <strong>ESPECIFICACIONES DE AUDITORÍA:</strong>
-        <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li><strong>25 Reactivos Únicos:</strong> Sin repeticiones, nivel consultoría senior.</li>
-            <li><strong>Intento Único:</strong> Bloqueo permanente al concluir.</li>
-            <li><strong>Revisión Crítica:</strong> 20 segundos de auditoría con barra lateral activa.</li>
-        </ul>
-    </div>
-    <input type="text" id="nom" placeholder="Nombre Completo del Candidato">
-    <input type="text" id="mat" placeholder="Matrícula Institucional">
-    <button class="btn" onclick="iniciarExamen()">INICIAR EVALUACIÓN DE INGENIERÍA</button>
-</div>
-
-<div id="p-exam" class="container hidden">
-    <div id="timer" style="background:var(--uvm); color:white; padding:10px; text-align:center; margin-bottom:15px; border-radius:5px; font-weight:bold;">TIEMPO LÍMITE: <span id="clock">60:00</span></div>
-    <div id="content"></div>
-</div>
-
-<div id="p-rev" class="container hidden">
-    <h2 style="color:var(--uvm); text-align:center;">INFORME DE DESEMPEÑO TÉCNICO</h2>
-    <div style="text-align:center; background:#161b22; padding:20px; border-radius:10px;">
-        <p>CALIFICACIÓN OBTENIDA:</p>
-        <div id="score-display">0.0</div>
-        <p>CIERRE DE REVISIÓN EN: <span id="rev-countdown" style="font-size:2em; font-weight:bold; color:var(--red);">20</span>s</p>
-    </div>
-    <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
-    <div id="rev-lista"></div>
-</div>
-
 <script>
-    if(localStorage.getItem("pni_final_audit_v1")) {
-        document.getElementById('p-reg').classList.add('hidden');
-        document.getElementById('block-screen').style.display = 'block';
-    }
-
-    // BANCO DE 25 CASOS ÚNICOS REDACTADOS INDIVIDUALMENTE
-    const bancoOriginal = [
-        { p: "CASO 1: Un exportador mexicano de nanotecnología firma una venta hacia Alemania bajo Incoterm DDP. El equipo omite que el cliente carece de licencia de importador registrado (IOR) y gestión de IVA diferido.\n\nComo consecuencia, la carga queda retenida en Frankfurt con costos de almacenaje de 650 USD diarios. Este fallo compromete la rentabilidad y la reputación técnica de la matriz ante socios europeos.", q: "¿Qué fallo de arquitectura de valor se cometió?", o: ["Error en Incoterm y falta de validación de capacidades legales.", "Optimización logística para entrega directa.", "Ahorro administrativo de trámites aduanales."], r: 0 },
-        { p: "CASO 2: En la expansión a Japón, el diagnóstico PESTEL detecta barreras culturales críticas en protocolos de negocios. El equipo decide usar un estilo agresivo de cierre rápido para demostrar liderazgo empresarial.\n\nEl socio local interpreta esto como una falta de respeto a la etiqueta (Guanxi/Omotenashi), deteniendo las pláticas de inversión de forma indefinida y cerrando el ecosistema de valor local.", q: "¿Cuál es el riesgo de integridad y cimentación detectado?", o: ["Ruptura de confianza bicultural y fracaso del acuerdo estratégico.", "Mejora del posicionamiento frente a competidores asiáticos.", "Aceleración del Time-to-Market mediante presión competitiva."], r: 0 },
-        { p: "CASO 3: Un Plan identifica una tendencia hacia sostenibilidad extrema en Francia (Loi AGEC). El equipo propone un MVP con plásticos no reciclables para reducir costos operativos iniciales en un 18%.\n\nIgnoran que las penalizaciones por falta de responsabilidad extendida del productor superarán los 50,000 euros anuales, invalidando cualquier proyección de utilidad neta en el primer trienio.", q: "¿Qué dictamen emite el Auditor ante esta incoherencia?", o: ["Semáforo Rojo: Incoherencia crítica entre diagnóstico legal y diseño.", "Semáforo Verde: El ahorro justifica el despliegue del MVP.", "Semáforo Amarillo: Avance condicionado si se oculta la ficha técnica."], r: 0 },
-        { p: "CASO 4: Una empresa entra a China mediante Joint Venture aportando tecnología propia sin registro de patentes locales. Confían plenamente en las cláusulas de confidencialidad del contrato estándar.\n\nDetectan una copia idéntica operada por una subsidiaria del socio local. Al no existir propiedad intelectual registrada localmente, la matriz carece de sustento jurídico para reclamar la expropiación técnica.", q: "¿Qué vulnerabilidad estratégica de PI se presenta?", o: ["Riesgo de expropiación técnica y pérdida de ventaja competitiva.", "Protección total mediante el derecho internacional privado.", "Optimización del vehículo jurídico reduciendo trámites burocráticos."], r: 0 },
-        { p: "CASO 5: El equipo define un Gap de Mercado basándose en una encuesta a 100 conocidos en México, bajo el supuesto de que el producto tendrá éxito en España simplemente por compartir el mismo idioma.\n\nOmiten el análisis psicográfico de los seguidores globales (Early Adopters) en la región de destino, ignorando que el comportamiento de compra difiere radicalmente del entorno nacional, resultando en nulo interés.", q: "¿Por qué esta inteligencia de mercado es técnicamente nula?", o: ["Carece de validación de Early Adopters reales y fuentes oficiales.", "Representa la base científica del modelo Lean Startup exitoso.", "El idioma es la variable determinante del éxito operativo."], r: 0 },
-        { p: "CASO 6: Se elige 'Licencia' como vehículo de entrada a Canadá, pero no se incluyen cláusulas de auditoría de calidad. El licenciatario comienza a vender productos de baja gama bajo la marca original.\n\nEsto genera un daño reputacional severo a la matriz mexicana, que no puede rescindir el contrato por vacíos legales. La falta de diseño organizacional en la Fase 1 facilitó esta vulnerabilidad operativa.", q: "¿Qué debilidad organizacional se manifiesta en este escenario?", o: ["Ausencia de mecanismos de control sobre la propiedad intelectual.", "Éxito en la diversificación del modelo mediante socios independientes.", "Reducción de costos fijos por transferencia total de operación."], r: 0 },
-        { p: "CASO 7: Se propone un 'Trendsetter' de salud en Alemania, pero el Benchmarking revela 3 patentes europeas vigentes que cubren el 90% de la funcionalidad del MVP mexicano.\n\nEl diagnóstico omitió la revisión de la libertad de operación (Freedom to Operate), exponiendo a la empresa a demandas millonarias al momento de la comercialización, invalidando la oferta exportable.", q: "¿Qué variable del PESTEL fue ignorada críticamente?", o: ["Variable Legal: Protección de propiedad intelectual y patentes.", "Variable Económica: Capacidad de compra del sistema público.", "Variable Tecnológica: Infraestructura de internet para el MVP."], r: 0 },
-        { p: "CASO 8: La misión declara compromiso con sostenibilidad. Sin embargo, se subcontrata manufactura en zona con nulas regulaciones ambientales para asegurar un ROI proyectado del 45%.\n\nGemini detecta que no hay integración real con la comunidad ni propuesta de valor social, contradiciendo el discurso de marca y exponiendo al proyecto a una crisis de reputación global.", q: "¿Qué principio de ingeniería de negocios se está violando?", o: ["Integridad y Coherencia entre filosofía y operación real.", "Optimización de la cadena de suministro para maximizar utilidad.", "Posicionamiento basado en la reducción agresiva de costos."], r: 0 },
-        { p: "CASO 9: El equipo mexicano llega a la negociación en Dubái. Ignoran protocolos locales y presionan al socio para firmar en la primera reunión, sin permitir el proceso de construcción de confianza.\n\nEl socio local percibe falta de seriedad y retira la oferta de inversión. El equipo no adaptó su estilo de negociación a la cultura de alta proximidad y tiempo circular del mercado destino.", q: "¿Qué competencia bicultural falló en este proceso?", o: ["Adaptación de protocolos y gestión de tiempos de negociación.", "Tácticas de presión agresivas para asegurar el capital.", "Estandarización de contratos bajo leyes mexicanas."], r: 0 },
-        { p: "CASO 10: Ante una devaluación del 20% en Colombia, el plan no contempla cobertura (Hedging) ni ajuste de precios. Al repatriar utilidades, la matriz descubre que la utilidad proyectada se evaporó.\n\nLa falta de resiliencia financiera en la Fase 8 demuestra carencia de visión estratégica ante la volatilidad de mercados emergentes, comprometiendo los flujos de capital transfronterizos.", q: "¿Qué herramienta técnica debió integrar el equipo para mitigar el impacto?", o: ["Plan de contingencia financiero y mecanismos de cobertura.", "Aumento de presupuesto publicitario para compensar valor.", "Reducción de calidad para mantener margen en pesos."], r: 0 }
+    // BANCO DE DATOS: 25 Casos Diversificados y Únicos
+    const bancoDefinitivo = [
+        { p: "CASO 1: Diagnóstico profundo PESTEL y Gap de Mercado...", q: "¿Qué premisas garantizan una cimentación estratégica sólida?", o: ["a) 1, 2, 4", "b) 2, 3, 5", "c) 3, 5, 6"], r: 0 },
+        { p: "CASO 2: Auditoría de Riesgo de Relevancia...", q: "¿Qué conjunto de factores valida la relevancia técnica?", o: ["a) 2, 3, 5", "b) 1, 4, 6", "c) 3, 4, 5"], r: 1 },
+        { p: "CASO 3: Coherencia entre diseño organizacional y diagnóstico...", q: "¿Qué elementos aseguran la coherencia operativa?", o: ["a) 1, 4, 6", "b) 2, 3, 5", "c) 4, 5, 6"], r: 1 },
+        { p: "CASO 4: Identificación de Early Adopters globales...", q: "¿Qué características definen al segmento de validación?", o: ["a) 1, 5, 6", "b) 2, 3, 4", "c) 3, 4, 6"], r: 0 },
+        { p: "CASO 5: Línea Base en Fase 0 con Gemini...", q: "¿Qué requisitos otorgan validez técnica a la Fase 0?", o: ["a) 1, 3, 6", "b) 2, 4, 5", "c) 3, 5, 6"], r: 1 },
+        { p: "CASO 6: Plan de Comunicación y adaptación cultural...", q: "¿Cuáles son los pilares de la comunicación efectiva?", o: ["a) 1, 2, 5", "b) 2, 4, 5", "c) 2, 4, 6"], r: 2 },
+        { p: "CASO 7: Selección de Canales y Gestión B2B/B2C...", q: "¿Qué factores determinan el éxito de la distribución?", o: ["a) 1, 2, 6", "b) 3, 4, 5", "c) 2, 5, 6"], r: 0 },
+        { p: "CASO 8: Red de Socios Clave para mitigar riesgo de entrada...", q: "¿Qué roles desempeñan los socios estratégicos?", o: ["a) 1, 3, 4", "b) 1, 3, 6", "c) 2, 3, 5, 6"], r: 2 },
+        { p: "CASO 9: Vehículos Jurídicos (Licencias, Franquicias, Consorcios)...", q: "¿Qué vehículos minimizan el impacto financiero?", o: ["a) 1, 3, 4", "b) 2, 4, 5", "c) 3, 5, 6"], r: 0 },
+        { p: "CASO 10: Protocolo de Bloqueo Secuencial Nivel 5...", q: "¿Cuáles son las reglas de seguridad de auditoría?", o: ["a) 1, 4, 5", "b) 2, 3, 4, 5", "c) 4, 5, 6"], r: 1 },
+        { p: "CASO 11: Adaptación Técnica. Para entrar a la UE, el empaque actual no es biodegradable, violando la normativa ambiental local.", q: "¿Cómo impacta esto en la Arquitectura de Valor?", o: ["a) Obliga a un rediseño de ingeniería de empaque", "b) No impacta si el producto es digital", "c) Se soluciona con marketing"], r: 0 },
+        { p: "CASO 12: Gestión de Incoterms. El cliente exige entrega en sus bodegas en Lyon, asumiendo el vendedor toda la responsabilidad.", q: "¿Qué Incoterm 2020 define esta operación?", o: ["a) EXW (Ex Works)", "b) DDP (Delivered Duty Paid)", "c) FOB (Free on Board)"], r: 1 },
+        { p: "CASO 13: Protocolo de Negociación. En Dubái, el equipo debe decidir el ritmo de cierre tras la primera cena.", q: "¿Cuál es la táctica bicultural correcta?", o: ["a) Forzar la firma inmediata", "b) Priorizar la relación y la confianza", "c) Enviar el contrato por mail"], r: 1 },
+        { p: "CASO 14: Sostenibilidad Ética. Se detecta materia prima de zona de conflicto sin certificación de origen.", q: "¿Qué acción valida la fase de Integridad?", o: ["a) Sustituir al proveedor por uno con trazabilidad", "b) Ignorarlo para no elevar costos", "c) Mentir en el reporte"], r: 0 },
+        { p: "CASO 15: Viabilidad Financiera. El ROI es positivo, pero el flujo se agota por aranceles imprevistos.", q: "¿Qué falló en el Drill-down?", o: ["a) El cálculo de impuestos de importación", "b) La visión creativa", "c) El diseño del logo"], r: 0 },
+        { p: "CASO 16: Gobernanza Global. La empresa pierde control sobre la calidad del servicio en Sudamérica.", q: "¿Qué mecanismo se debe implementar?", o: ["a) Descentralización total", "b) Auditoría centralizada basada en KPIs", "c) Eliminar las filiales"], r: 1 },
+        { p: "CASO 17: Estructura Organizacional. Se requiere agilidad para responder a cambios de precios en Asia.", q: "¿Qué modelo de decisión es óptimo?", o: ["a) Centralización en matriz", "b) Descentralización facultada (Empowerment)", "c) Consultoría externa"], r: 1 },
+        { p: "CASO 18: Inteligencia de Mercado. El equipo usa solo Wikipedia para sustentar la entrada a un mercado tecnológico.", q: "¿Por qué el Auditor Gemini daría Semáforo Rojo?", o: ["a) Falta de fuentes oficiales y datos de cámaras", "b) El reporte es muy largo", "c) Wikipedia es suficiente"], r: 0 },
+        { p: "CASO 19: Validación de Tracción. El MVP fue probado con 10 usuarios ajenos al segmento meta.", q: "¿Cuál es el riesgo técnico?", o: ["a) Sesgo de datos y error en Risk-Execution", "b) Ninguno", "c) Éxito asegurado"], r: 0 },
+        { p: "CASO 20: Seguridad de Procesos. Se cargan 10 prompts al mismo tiempo para terminar la Fase 6.", q: "¿Qué sucede con la Auditoría?", o: ["a) El sistema bloquea por procesamiento masivo", "b) El sistema premia la velocidad", "c) No pasa nada"], r: 0 },
+        { p: "CASO 21: Joint Venture. El socio local aporta el 50% pero quiere cambiar el nombre de la marca original.", q: "¿Qué documento debe prever esta disputa?", o: ["a) Acuerdo de accionistas (Shareholders Agreement)", "b) Factura proforma", "c) Folleto publicitario"], r: 0 },
+        { p: "CASO 22: Logística Inversa. El cliente devuelve el 20% del lote por daños en el transporte marítimo.", q: "¿Qué elemento de la Fase 7 falló?", o: ["a) Embalaje de exportación y gestión de seguros", "b) El precio de venta", "c) La misión"], r: 0 },
+        { p: "CASO 23: Responsabilidad Social. El proyecto usa energía solar pero desplaza a una comunidad sin consulta.", q: "¿Qué principio se está violando?", o: ["a) Legitimidad y licencia social para operar", "b) Rentabilidad", "c) Estética"], r: 0 },
+        { p: "CASO 24: Ruta de Éxito. El equipo decide abrir oficina física antes de realizar el diagnóstico PESTEL.", q: "¿Por qué aumenta el riesgo de fracaso?", o: ["a) Inversión en activos sin validar entorno", "b) Es mejor comprar primero", "c) Los activos siempre dan dinero"], r: 0 },
+        { p: "CASO 25: Auditoría Final. Reporte con coherencia pero el Gap de mercado no tiene sustento real.", q: "¿Cuál es el veredicto técnico?", o: ["a) Rechazo por falta de cimentación estratégica", "b) Aprobación por diseño", "c) Pase automático"], r: 0 }
     ];
 
-    // GENERADOR DE CASOS TÉCNICOS ADICIONALES (11-25) SIN REPETIR EL TEXTO DEL CASO 8
-    const temasAudit = ["Riesgo País", "Logística Inversa", "Certificaciones ISO", "E-commerce Global", "Aranceles", "Canales B2B", "Compliance", "Trendsetting"];
-    for(let i=11; i<=25; i++) {
-        let t = temasAudit[i % temasAudit.length];
-        bancoOriginal.push({
-            p: `CASO ${i} (AUDITORÍA DE ${t.toUpperCase()}): Durante la evaluación de la Fase ${Math.floor(i/3)}, el Consultor identifica que el equipo no validó las normas de etiquetado específicas del mercado destino. Esto provocó el rechazo total del primer embarque en aduanas.\n\nEsta negligencia técnica genera una pérdida directa del capital de trabajo y requiere una reingeniería del 40% del proceso de empaque. La falta de una lista de verificación técnica en el Protocolo Empresarial original demuestra una debilidad en la ejecución operativa del plan de negocios internacional.`,
-            q: "¿Cuál es la acción técnica obligatoria ante este fallo?",
-            o: ["Ajustar el diseño técnico a la normativa local de inmediato.", "Ignorar el fallo y negociar una excepción con el socio local.", "Aumentar el gasto en marketing para mejorar la percepción."], r: 0
-        });
-    }
-
-    let examData = [], current = 0, score = 0, timeLeft = 3600, userAnswers = [];
-    let qTimer, qTime = 80;
-
-    function shuffle(arr) {
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
+    let currentIndex = 0;
+    let score = 0;
+    let userAnswers = [];
+    let qTimer;
+    let isProcessing = false; // Guard para evitar clics rápidos
 
     function iniciarExamen() {
-        const n = document.getElementById('nom').value;
-        const m = document.getElementById('mat').value;
-        if(n.length < 5 || m.length < 3) return alert("Identificación requerida.");
-
-        examData = shuffle([...bancoOriginal]).map(item => {
-            let opts = item.o.map((text, index) => ({ text, isCorrect: index === item.r }));
-            opts = shuffle(opts);
-            return { p: item.p, q: item.q, options: opts };
-        });
-
+        const n = document.getElementById('nom')?.value;
+        const m = document.getElementById('mat')?.value;
+        if(!n || n.length < 5 || !m || m.length < 3) return alert("Identificación requerida.");
+        
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('p-exam').classList.remove('hidden');
         document.getElementById('watermark').innerHTML = `${n}<br>${m}`;
         render();
-        setInterval(() => { if(timeLeft > 0) { timeLeft--; document.getElementById('clock').innerText = Math.floor(timeLeft/60) + ":" + (timeLeft%60).toString().padStart(2,'0'); } }, 1000);
-        window.onblur = () => { if(current < 25) location.reload(); };
     }
 
     function render() {
-        if(current >= 25) return finish();
-        clearInterval(qTimer); qTime = 80;
+        // Validación de fin de banco (Uso de length en lugar de número mágico)
+        if(currentIndex >= bancoDefinitivo.length) {
+            finish();
+            return;
+        }
+
+        isProcessing = false; // Liberamos el guard para la nueva pregunta
+        clearInterval(qTimer);
+        let qTime = 80;
+        document.getElementById('timer-bar').style.width = "100%";
+        
         qTimer = setInterval(() => {
             qTime--;
             document.getElementById('timer-bar').style.width = (qTime/80)*100 + "%";
-            if(qTime <= 0) location.reload();
+            if(qTime <= 0) saveAns(-1);
         }, 1000);
-        const d = examData[current];
-        document.getElementById('content').innerHTML = `
-            <div class="planteamiento">${d.p}</div>
-            <h3 style="color:#fff;">${d.q}</h3>
-            ${d.options.map(opt => `<div class="option" onclick="saveAns(${opt.isCorrect})">${opt.text}</div>`).join('')}
-        `;
+
+        const item = bancoDefinitivo[currentIndex];
+        const contentDiv = document.getElementById('content');
+        if(contentDiv) {
+            contentDiv.innerHTML = `
+                <div class="planteamiento"><b>REACTIVO ${currentIndex + 1}:</b><br>${item.p}</div>
+                <h3 style="color:#fff;">${item.q}</h3>
+                ${item.o.map((opt, i) => `<div class="option" onclick="saveAns(${i})">${opt}</div>`).join('')}
+            `;
+        }
     }
 
-    function saveAns(isCorrect) {
-        userAnswers.push(isCorrect);
-        if(isCorrect) score++;
-        current++; render();
+    function saveAns(idx) {
+        if(isProcessing) return; // Evita doble clic
+        isProcessing = true;
+        
+        clearInterval(qTimer);
+        const correct = (idx === bancoDefinitivo[currentIndex].r);
+        userAnswers.push(correct);
+        if(correct) score++;
+        
+        currentIndex++;
+        render();
     }
 
     function finish() {
-        clearInterval(qTimer);
-        localStorage.setItem("pni_final_audit_v1", "true");
-        const nota = ((score / 25) * 10).toFixed(2);
+        // Cálculo dinámico de nota basado en la longitud del banco
+        const totalPreguntas = bancoDefinitivo.length;
+        const nota = ((score / totalPreguntas) * 10).toFixed(2);
+        
+        const nombre = document.getElementById('nom').value;
+        const matricula = document.getElementById('mat').value;
 
-        // --- ENVÍO POR FORMULARIO OCULTO (MÉTODO INFALIBLE) ---
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
-        form.target = "hidden_iframe";
+        // Envío al Formulario
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
+        const data = new URLSearchParams();
+        data.append("entry.2005620554", nombre);
+        data.append("entry.1045792443", matricula);
+        data.append("entry.1065046570", nota);
+        data.append("entry.1166974658", `Texcoco. Aciertos: ${score}/${totalPreguntas}`);
 
-        const data = {
-            "entry.2005620554": document.getElementById('nom').value,
-            "entry.1045792443": document.getElementById('mat').value,
-            "entry.1065046570": nota,
-            "entry.1166974658": `Aciertos: ${score}/25`
-        };
-
-        for (let key in data) {
-            let input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = data[key];
-            form.appendChild(input);
-        }
-
-        const iframe = document.createElement("iframe");
-        iframe.name = "hidden_iframe";
-        iframe.style.display = "none";
-        document.body.appendChild(iframe);
-        document.body.appendChild(form);
-        form.submit();
+        fetch(formURL, { method: 'POST', mode: 'no-cors', body: data });
 
         document.getElementById('score-display').innerText = nota;
-        showReview();
-    }
-
-    function showReview() {
         document.getElementById('p-exam').classList.add('hidden');
         document.getElementById('p-rev').classList.remove('hidden');
-        document.body.style.overflow = "auto"; 
+        mostrarRevision();
+    }
+
+    function mostrarRevision() {
         let h = "";
-        examData.forEach((p, i) => { if(!userAnswers[i]) h += `<div class="rev-card"><strong>FALLO EN CASO ${i+1}:</strong><br><p>${p.p}</p></div>`; });
-        document.getElementById('rev-lista').innerHTML = h || "<h3>SIN ERRORES REGISTRADOS</h3>";
-        let revT = 20;
-        const rInt = setInterval(() => { revT--; document.getElementById('rev-countdown').innerText = revT; if(revT <= 0) { clearInterval(rInt); location.reload(); } }, 1000);
+        bancoDefinitivo.forEach((p, i) => {
+            // Cambio sugerido: Validación explícita de fallos
+            if (userAnswers[i] !== true) {
+                h += `<div class="rev-card"><strong>FALLO EN CASO ${i+1}:</strong><p>${p.p}</p></div>`;
+            }
+        });
+        const revLista = document.getElementById('rev-lista');
+        if(revLista) revLista.innerHTML = h || "<h3>CERTIFICACIÓN APROBADA SIN ERRORES</h3>";
     }
 </script>
-</body>
-</html>
