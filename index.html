@@ -27,11 +27,19 @@
 
 <div id="block-screen">
     <h1>🚫 PROCESO CONCLUIDO</h1>
-    <p>Se ha detectado un registro previo. No se permiten re-intentos.</p>
+    <p>Usted ya realizó su intento de certificación. No se permiten re-intentos.</p>
 </div>
 
 <div id="p-reg" class="container">
     <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
+    <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <strong>AUDITORÍA DE INTEGRIDAD:</strong>
+        <ul style="font-size: 0.9em; line-height: 1.8;">
+            <li><strong>25 Reactivos Críticos:</strong> Sin repeticiones, aleatorización total.</li>
+            <li><strong>Blindaje:</strong> Salida de foco o recarga anula el examen.</li>
+            <li><strong>Revisión:</strong> 20 segundos de visualización de errores únicamente.</li>
+        </ul>
+    </div>
     <input type="text" id="nom" placeholder="Nombre Completo">
     <input type="text" id="mat" placeholder="Matrícula">
     <button class="btn" onclick="iniciarExamen()">INICIAR CERTIFICACIÓN (25 CASOS)</button>
@@ -45,38 +53,44 @@
 <div id="p-rev" class="container hidden">
     <h2 style="color:var(--red); text-align:center;">INFORME DE FALLOS</h2>
     <div style="text-align:center; background:#161b22; padding:15px; border-radius:8px;">
-        <p>REVISIÓN EXPIRA EN: <span id="rev-countdown" style="font-size:2em; font-weight:bold;">20</span>s</p>
+        <p>CIERRE DE REVISIÓN EN: <span id="rev-countdown" style="font-size:2em; font-weight:bold;">20</span>s</p>
     </div>
     <div id="rev-lista"></div>
 </div>
 
 <script>
-    // Bloqueo de re-intento
-    if(localStorage.getItem("pni_parcial_locked")) {
+    if(localStorage.getItem("pni_parcial_v4_locked")) {
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('block-screen').style.display = 'block';
     }
 
-    // BASE DE DATOS DE 25 CASOS ÚNICOS DE ALTA COMPLEJIDAD
-    const bancoOriginal = [
-        { p: "CASO 1: Un exportador mexicano utiliza Incoterm DDP para Nueva York sin considerar que el cliente no posee licencia de importador registrado (IOR). La mercancía queda retenida en la aduana JFK con costos diarios de almacenaje de 500 USD.", q: "¿Qué fallo técnico de arquitectura de valor se cometió?", o: ["Error en la selección de Incoterm y falta de validación de capacidades legales del socio.", "Ahorro estratégico en logística internacional.", "Optimización de tracción mediante entrega directa."], r: 0 },
-        { p: "CASO 2: En la expansión a Japón, el diagnóstico PESTEL detecta una barrera cultural alta en protocolos de negociación. El equipo decide usar un estilo agresivo de cierre rápido para demostrar liderazgo empresarial.", q: "¿Cuál es el riesgo de integridad comercial detectado?", o: ["Ruptura de la construcción de confianza (Guanxi/Etiqueta) y fracaso del acuerdo.", "Mejora del posicionamiento de marca frente a competidores asiáticos.", "Aceleración del Time-to-Market mediante presión competitiva."], r: 0 },
-        { p: "CASO 3: Un Plan de Negocios identifica una macrotendencia hacia la sostenibilidad extrema en Francia (Loi AGEC), pero el MVP propuesto utiliza plásticos de un solo uso para reducir costos operativos un 15%.", q: "¿Qué dictamen emite el Auditor Gemini en la Fase 0?", o: ["Semáforo Rojo: Incoherencia crítica entre diagnóstico legal y diseño de producto.", "Semáforo Verde: El ahorro financiero justifica el incumplimiento temporal.", "Semáforo Amarillo: Se permite el avance si se oculta la composición del envase."], r: 0 },
-        { p: "CASO 4: La empresa selecciona una Joint Venture en China aportando tecnología propia sin registrar patentes locales, confiando en la cláusula de confidencialidad del contrato estándar de la matriz.", q: "¿Qué vulnerabilidad de propiedad intelectual se presenta?", o: ["Riesgo de expropiación técnica y pérdida de ventaja competitiva a largo plazo.", "Protección total mediante el derecho internacional privado.", "Optimización del vehículo jurídico por reducción de trámites burocráticos."], r: 0 },
-        { p: "CASO 5: Se define un Gap de Mercado basándose en una encuesta realizada a 50 amigos de los emprendedores en México, afirmando que 'seguramente el producto tendrá éxito en España' por compartir el idioma.", q: "¿Por qué esta inteligencia de mercado es técnicamente nula?", o: ["Carece de validación de Early Adopters reales en el mercado destino y de fuentes oficiales.", "Las encuestas de amigos son la base del Lean Startup exitoso.", "El idioma es la única variable que asegura el éxito en la internacionalización."], r: 0 }
-        // ... (El sistema completará los 25 casos automáticamente para asegurar el flujo)
+    const bancoPreguntas = [
+        { p: "CASO 1: Un exportador mexicano usa Incoterm DDP para Nueva York sin considerar que el cliente no posee licencia de importador registrado (IOR). La carga queda retenida con costos de 500 USD diarios.", q: "¿Qué fallo de arquitectura de valor se cometió?", o: ["Error en Incoterm y falta de validación de capacidades legales del socio.", "Optimización logística mediante entrega directa.", "Ahorro estratégico en trámites aduanales."], r: 0 },
+        { p: "CASO 2: Expansión a Japón: El PESTEL detecta barreras culturales altas en protocolos. El equipo decide usar un estilo agresivo de cierre rápido para demostrar liderazgo.", q: "¿Cuál es el riesgo detectado?", o: ["Ruptura de confianza (Guanxi) y fracaso del acuerdo comercial.", "Mejora del posicionamiento frente a la competencia asiática.", "Aceleración del Time-to-Market bajo presión."], r: 0 },
+        { p: "CASO 3: El plan identifica tendencia de sostenibilidad en Francia (Loi AGEC), pero el MVP usa plásticos no reciclables para reducir costos un 15%.", q: "¿Qué dictamen emite el Auditor Gemini?", o: ["Semáforo Rojo: Incoherencia crítica entre diagnóstico legal y diseño.", "Semáforo Verde: El ahorro financiero justifica el MVP inicial.", "Semáforo Amarillo: Se permite el avance si se oculta la ficha técnica."], r: 0 },
+        { p: "CASO 4: Una Joint Venture en China aporta tecnología propia sin registrar patentes locales, confiando solo en el contrato de confidencialidad de la matriz.", q: "¿Qué vulnerabilidad de PI se presenta?", o: ["Riesgo de expropiación técnica y pérdida de ventaja competitiva.", "Protección total mediante el derecho internacional privado.", "Optimización de trámites burocráticos."], r: 0 },
+        { p: "CASO 5: Se define un Gap de Mercado basándose en una encuesta a 50 amigos en México, afirmando que el producto tendrá éxito en España solo por el idioma.", q: "¿Por qué esta inteligencia es técnicamente nula?", o: ["Carece de validación de Early Adopters reales y fuentes oficiales.", "Las encuestas a conocidos son la base del Lean Startup.", "El idioma asegura el éxito en la internacionalización."], r: 0 },
+        { p: "CASO 6: Un equipo omite el análisis de 'Riesgo País' en una expansión a una región con inestabilidad política súbita, alegando que el producto es de consumo masivo.", q: "¿Qué factor de resiliencia estratégica fue ignorado?", o: ["Gestión de riesgos operativos y continuidad de negocio.", "Tracción de mercado por volumen de ventas.", "Diseño estético del organigrama."], r: 0 },
+        { p: "CASO 7: En el Plan de Comunicación (1.4), el equipo usa el mismo branding de México para una campaña en Arabia Saudita, ignorando semiótica y códigos culturales.", q: "¿Qué fallo de inmersión se detecta?", o: ["Error de adaptación cultural y riesgo de rechazo social inmediato.", "Eficiencia de costos por estandarización de marca global.", "Mejora del Trendsetting por exotismo visual."], r: 0 },
+        { p: "CASO 8: El equipo elige 'Licencia' como vehículo de entrada, pero el licenciatario en el extranjero comienza a vender productos de menor calidad bajo la marca original.", q: "¿Qué fallo de control organizacional ocurrió?", o: ["Falta de auditorías de calidad y cláusulas de protección de marca.", "Éxito operativo por delegación total al socio local.", "Estrategia de descentralización de costos aprobada."], r: 0 },
+        { p: "CASO 9: Se establece un precio de exportación omitiendo el cálculo de aranceles (AD Valorem) y el 're-empaque' necesario para el país destino.", q: "¿Qué riesgo financiero es inminente?", o: ["Venta a pérdida por subestimación de costos de aterrizaje.", "Aumento de demanda por precio competitivo.", "Optimización de flujo de efectivo."], r: 0 },
+        { p: "CASO 10: La misión declara 'Compromiso con la Ética', pero el equipo subcontrata fabricación en una zona con denuncias de explotación laboral para subir el margen.", q: "¿Qué diagnóstico emite el Auditor de Integridad?", o: ["Incoherencia Ética: El modelo de valor social es inexistente y riesgoso.", "Estrategia financiera de alta rentabilidad aprobada.", "Marketing social reactivo."], r: 0 },
+        { p: "CASO 11: Se identifica un 'Early Adopter' basándose en ingresos altos, pero el producto es una herramienta técnica que requiere conocimientos previos que el target no posee.", q: "¿Qué error de segmentación se cometió?", o: ["Falla en el perfil psicográfico y de competencias del target.", "Éxito por exclusividad de precio.", "Optimización de tracción por estatus."], r: 0 },
+        { p: "CASO 12: Durante la simulación, un desastre natural interrumpe la ruta principal. El equipo no tiene rutas alternas ni seguros de transporte internacional.", q: "¿Qué competencia de ingeniería está ausente?", o: ["Resiliencia Logística y gestión de contingencias.", "Diseño de producto y empaque.", "Técnicas de negociación agresiva."], r: 0 },
+        { p: "CASO 13: La empresa usa un Consorcio de Exportación pero no define reglas de propiedad sobre la base de datos de clientes compartida.", q: "¿Qué conflicto organizacional se prevee?", o: ["Conflictos de propiedad intelectual y canibalización de clientes.", "Sinergia absoluta por compartir recursos.", "Reducción de costos de marketing."], r: 0 },
+        { p: "CASO 14: El diagnóstico PESTEL indica una tendencia hacia lo digital, pero la estrategia de canales (1.5) se basa en tiendas físicas de alto costo de renta.", q: "¿Qué riesgo de ejecución se presenta?", o: ["Desconexión entre macrotendencia y estrategia de canales.", "Posicionamiento premium por presencia física.", "Ahorro en logística de última milla."], r: 0 },
+        { p: "CASO 15: El equipo no define su BATNA en la negociación con un distribuidor extranjero y termina cediendo el 70% de las utilidades.", q: "¿Por qué se considera una negociación fallida?", o: ["Por falta de preparación estratégica y desconocimiento del valor propio.", "Porque ceder garantiza una relación de 50 años.", "Porque el socio local ahora tiene mayor interés."], r: 0 },
+        { p: "CASO 16: Se decide entrar a China mediante una Sucursal Propia con inversión del 100% sin haber realizado antes una prueba de MVP o Licencia.", q: "¿Qué principio de gestión de riesgo se violó?", o: ["Escalabilidad gradual y validación de mercado previa.", "Ambición empresarial necesaria para mercados grandes.", "Estandarización de procesos internacionales."], r: 0 },
+        { p: "CASO 17: El diseño del organigrama (Fase 1.2) centraliza todas las decisiones en México, causando que la oficina en Londres tarde 15 días en responder a clientes locales.", q: "¿Qué cuello de botella se generó?", o: ["Inoperatividad por exceso de centralización en una estructura global.", "Control total de calidad desde la matriz.", "Optimización de la cultura organizacional."], r: 0 },
+        { p: "CASO 18: El equipo afirma ser 'Trendsetter' porque su producto tiene colores brillantes, ignorando que la competencia en Europa ya usa tecnología similar desde hace 2 años.", q: "¿Qué fallo de Inteligencia de Mercado existe?", o: ["Benchmarking deficiente y falta de validación de innovación real.", "Liderazgo por diseño visual.", "Estrategia de seguidor rápido."], r: 0 },
+        { p: "CASO 19: El modelo de 'Valor Social' se limita a decir que 'se darán empleos', sin métricas de impacto ni programas de desarrollo comunitario en el socio.", q: "¿Qué riesgo de legitimidad se presenta?", o: ["Acciones sociales superficiales que no generan resiliencia ni valor real.", "Optimización de costos laborales.", "Marketing de guerrilla."], r: 0 },
+        { p: "CASO 20: Al calcular el ROI, el equipo no considera la retención de impuestos (Withholding Tax) que aplica el país destino a las remesas de utilidades hacia México.", q: "¿Qué error de ingeniería financiera se cometió?", o: ["Falta de planeación fiscal internacional.", "Ahorro contable por simplificación de variables.", "Margen de utilidad conservador."], r: 0 },
+        { p: "CASO 21: El equipo detecta un 'Gap de Mercado' en la falta de transporte escolar, pero su solución es una App de lujo que cuesta 5 veces más que el transporte actual.", q: "¿Qué falla en la validación del Gap?", o: ["Falta de correspondencia económica entre el problema y la solución propuesta.", "Estrategia de precio premium para segmentación alta.", "Innovación tecnológica disruptiva."], r: 0 },
+        { p: "CASO 22: En la negociación, el equipo mexicano llega 30 minutos tarde y comienza con chistes informales en una cultura de alta formalidad y puntualidad (ej. Alemania).", q: "¿Qué protocolo fue violado?", o: ["Protocolo de etiqueta internacional y respeto a la cultura de negocios.", "Táctica de negociación para relajar al oponente.", "Estrategia de superioridad temporal."], r: 0 },
+        { p: "CASO 23: Se selecciona el vehículo de 'Franquicia', pero el equipo no ha documentado sus procesos (Manuales de Operación) en el idioma del país destino.", q: "¿Qué riesgo de ejecución operativa se presenta?", o: ["Incapacidad de transferir el Know-How y pérdida de estandarización.", "Ahorro en traducción y documentación.", "Flexibilidad para que el franquiciatario improvise."], r: 0 },
+        { p: "CASO 24: El equipo afirma que su producto es ecológico pero no cuenta con la certificación ISO 14001 ni sellos verdes requeridos para importar en Holanda.", q: "¿Qué barrera técnica se ignoró?", o: ["Cumplimiento normativo y estándares de certificación internacional.", "Estrategia de 'Greenwashing' para atraer clientes.", "Reducción de trámites administrativos."], r: 0 },
+        { p: "CASO 25: Al finalizar la Fase 10, el veredicto muestra que el plan no es viable porque los costos de logística y aranceles superan el precio de venta en el mercado.", q: "¿Cuál es la conclusión técnica del Auditor?", o: ["Inviabilidad económica por falta de ingeniería de costos de exportación.", "El proyecto necesita más marketing para subir el precio.", "El mercado destino no está listo para el producto."], r: 0 }
     ];
-
-    // Autocompletar a 25 reactivos únicos de nivel ingeniería
-    while(bancoOriginal.length < 25) {
-        let i = bancoOriginal.length;
-        bancoOriginal.push({
-            p: `CASO COMPLEJO ${i+1}: Durante la Fase de Inmersión, se detecta que el flujo de efectivo proyectado no considera el 'gap' temporal de 90 días que imponen las aduanas en el país destino para la liberación de divisas. El equipo ignora este riesgo de liquidez.`,
-            q: "¿Qué competencia de gestión global está ausente?",
-            o: ["Resiliencia financiera y planificación de riesgos operativos transfronterizos.", "Capacidad de marketing internacional y tracción.", "Diseño estético del organigrama descentralizado."],
-            r: 0
-        });
-    }
 
     let examData = [], current = 0, score = 0, timeLeft = 3600, userAnswers = [];
     let qTimer, qTime = 80;
@@ -92,9 +106,9 @@
     function iniciarExamen() {
         const n = document.getElementById('nom').value;
         const m = document.getElementById('mat').value;
-        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación.");
+        if(n.length < 5 || m.length < 3) return alert("Ingrese datos de identificación válidos.");
 
-        examData = shuffle([...bancoOriginal]).map(item => {
+        examData = shuffle([...bancoPreguntas]).map(item => {
             let opts = item.o.map((text, index) => ({ text, isCorrect: index === item.r }));
             opts = shuffle(opts);
             return { p: item.p, q: item.q, options: opts };
@@ -116,7 +130,11 @@
             if(qTime <= 0) location.reload();
         }, 1000);
         const d = examData[current];
-        document.getElementById('content').innerHTML = `<div class="planteamiento">${d.p}</div><h3 style="color:#fff;">${d.q}</h3>` + d.options.map(opt => `<div class="option" onclick="saveAns(${opt.isCorrect})">${opt.text}</div>`).join('');
+        document.getElementById('content').innerHTML = `
+            <div class="planteamiento">${d.p}</div>
+            <h3 style="color:#fff;">${d.q}</h3>
+            ${d.options.map(opt => `<div class="option" onclick="saveAns(${opt.isCorrect})">${opt.text}</div>`).join('')}
+        `;
     }
 
     function saveAns(isCorrect) {
@@ -127,17 +145,15 @@
 
     function finish() {
         clearInterval(qTimer);
-        localStorage.setItem("pni_parcial_locked", "true");
+        localStorage.setItem("pni_parcial_v4_locked", "true");
         const nota = ((score / 25) * 10).toFixed(2);
 
-        // --- MOTOR DE ENVÍO CORREGIDO ---
+        // Envío silencioso vía iFrame
         const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
-        
-        // Enviar por formulario tradicional (más confiable para evitar bloqueos)
         const form = document.createElement("form");
         form.method = "POST";
         form.action = formURL;
-        form.target = "hidden_iframe"; // Evita que la página salte a Google
+        form.target = "hidden_iframe";
 
         const data = {
             "entry.2005620554": document.getElementById('nom').value,
@@ -154,14 +170,12 @@
             form.appendChild(input);
         }
 
-        // Crear iframe para el envío silencioso
         const iframe = document.createElement("iframe");
         iframe.name = "hidden_iframe";
         iframe.style.display = "none";
         document.body.appendChild(iframe);
         document.body.appendChild(form);
-        
-        form.submit(); // Disparar el envío
+        form.submit();
 
         showReview();
     }
