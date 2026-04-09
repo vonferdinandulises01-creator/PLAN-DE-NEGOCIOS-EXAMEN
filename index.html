@@ -18,6 +18,7 @@
         .btn { background: var(--uvm); color: white; border: none; padding: 20px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 18px; text-transform: uppercase; }
         .hidden { display: none !important; }
         .rev-card { border: 1px solid var(--red); padding: 20px; margin-bottom: 20px; border-radius: 8px; background: #1a0a0a; }
+        #score-display { font-size: 5em; color: var(--uvm); font-weight: bold; margin: 20px 0; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -32,14 +33,6 @@
 
 <div id="p-reg" class="container">
     <h2 style="color:var(--uvm); text-align:center;">EXAMEN PARCIAL 1: C1-2026<br>PLAN DE NEGOCIOS INTERNACIONALES</h2>
-    <div style="background: #21262d; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <strong>AUDITORÍA DE INTEGRIDAD:</strong>
-        <ul style="font-size: 0.9em; line-height: 1.8;">
-            <li><strong>25 Reactivos Críticos:</strong> Sin repeticiones, aleatorización total.</li>
-            <li><strong>Blindaje:</strong> Salida de foco o recarga anula el examen.</li>
-            <li><strong>Revisión:</strong> 20 segundos de visualización de errores únicamente.</li>
-        </ul>
-    </div>
     <input type="text" id="nom" placeholder="Nombre Completo">
     <input type="text" id="mat" placeholder="Matrícula">
     <button class="btn" onclick="iniciarExamen()">INICIAR CERTIFICACIÓN (25 CASOS)</button>
@@ -51,15 +44,18 @@
 </div>
 
 <div id="p-rev" class="container hidden">
-    <h2 style="color:var(--red); text-align:center;">INFORME DE FALLOS</h2>
-    <div style="text-align:center; background:#161b22; padding:15px; border-radius:8px;">
-        <p>CIERRE DE REVISIÓN EN: <span id="rev-countdown" style="font-size:2em; font-weight:bold;">20</span>s</p>
+    <h2 style="color:var(--uvm); text-align:center;">RESULTADO DE LA EVALUACIÓN</h2>
+    <div style="text-align:center; background:#161b22; padding:20px; border-radius:10px;">
+        <p>CALIFICACIÓN FINAL:</p>
+        <div id="score-display">0.0</div>
+        <p>REVISIÓN DE ERRORES EXPIRES EN: <span id="rev-countdown" style="font-size:2em; font-weight:bold; color:var(--red);">20</span>s</p>
     </div>
+    <hr style="border:0; border-top: 1px solid #333; margin: 20px 0;">
     <div id="rev-lista"></div>
 </div>
 
 <script>
-    if(localStorage.getItem("pni_parcial_v4_locked")) {
+    if(localStorage.getItem("pni_parcial_final_v5")) {
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('block-screen').style.display = 'block';
     }
@@ -114,6 +110,7 @@
             return { p: item.p, q: item.q, options: opts };
         });
 
+        document.getElementById('watermark').innerHTML = `${n}<br>${m}`;
         document.getElementById('p-reg').classList.add('hidden');
         document.getElementById('p-exam').classList.remove('hidden');
         render();
@@ -145,38 +142,26 @@
 
     function finish() {
         clearInterval(qTimer);
-        localStorage.setItem("pni_parcial_v4_locked", "true");
+        localStorage.setItem("pni_parcial_final_v5", "true");
         const nota = ((score / 25) * 10).toFixed(2);
 
-        // Envío silencioso vía iFrame
+        // --- ENVÍO MULTI-ID (SINCRO TOTAL) ---
         const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdFBOwuPUjxnZdqSy-4YItdhe8lt5naeYaSoROCsZaMPhgkUw/formResponse";
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = formURL;
-        form.target = "hidden_iframe";
+        const p = new URLSearchParams();
+        
+        // Enviamos a TODOS los IDs posibles para asegurar que capture la información
+        const n = document.getElementById('nom').value;
+        const m = document.getElementById('mat').value;
+        const meta = `Aciertos: ${score}/25`;
 
-        const data = {
-            "entry.2005620554": document.getElementById('nom').value,
-            "entry.1045792443": document.getElementById('mat').value,
-            "entry.1065046570": nota,
-            "entry.1166974658": `Aciertos: ${score}/25`
-        };
+        p.append("entry.2005620554", n); p.append("entry_nombre", n);
+        p.append("entry.1045792443", m); p.append("entry_matricula", m);
+        p.append("entry.1065046570", nota); p.append("entry_nota", nota);
+        p.append("entry.1166974658", meta);
 
-        for (let key in data) {
-            let input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = data[key];
-            form.appendChild(input);
-        }
+        fetch(formURL, { method: "POST", mode: "no-cors", body: p });
 
-        const iframe = document.createElement("iframe");
-        iframe.name = "hidden_iframe";
-        iframe.style.display = "none";
-        document.body.appendChild(iframe);
-        document.body.appendChild(form);
-        form.submit();
-
+        document.getElementById('score-display').innerText = nota;
         showReview();
     }
 
